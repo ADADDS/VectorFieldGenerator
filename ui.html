@@ -16,7 +16,7 @@ document.getElementById('create').onclick = () => {
   const columns = parseInt(secontText.value, 10);
   const padding = parseInt(thirdText.value, 10);
   const widthSize = parseInt(fourthText.value, 10);
-  parent.postMessage({ pluginMessage: { type: 'create-rectangles', rows, columns, padding, widthSize} }, '*')
+  parent.postMessage({ pluginMessage: { type: 'create-grid', rows, columns, padding, widthSize} }, '*')
 }
 
 document.getElementById('cancel').onclick = () => {
