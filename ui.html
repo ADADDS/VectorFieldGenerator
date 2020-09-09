@@ -1,0 +1,26 @@
+<h2>Vector Field Made of Focken Lines of Hell</h2>
+<p>Number of Rows: <input id="rows" value="3"></p>
+<p>Number of Columns: <input id="columns" value="3"></p>
+<p>Padding size: <input id="padding" value="150"></p>
+<p>Width base size: <input id="width-size" value="100"></p>
+<button id="create">Create</button>
+<button id="cancel">Cancel</button>
+<script>
+
+document.getElementById('create').onclick = () => {
+  const firstText = document.getElementById('rows');
+  const secontText = document.getElementById('columns');
+  const thirdText = document.getElementById('padding');
+  const fourthText = document.getElementById('width-size');
+  const rows = parseInt(firstText.value, 10);
+  const columns = parseInt(secontText.value, 10);
+  const padding = parseInt(thirdText.value, 10);
+  const widthSize = parseInt(fourthText.value, 10);
+  parent.postMessage({ pluginMessage: { type: 'create-rectangles', rows, columns, padding, widthSize} }, '*')
+}
+
+document.getElementById('cancel').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+}
+
+</script>
