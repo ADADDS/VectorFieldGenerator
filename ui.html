@@ -5,6 +5,7 @@
 <p>Width base size: <input id="width-size" value="100"></p>
 <button id="create">Create</button>
 <button id="cancel">Cancel</button>
+<button id="rotate">Random Rotate</button>
 <script>
 
 document.getElementById('create').onclick = () => {
@@ -21,6 +22,10 @@ document.getElementById('create').onclick = () => {
 
 document.getElementById('cancel').onclick = () => {
   parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+}
+
+document.getElementById('rotate').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'rotate-lines' } }, '*')
 }
 
 </script>
