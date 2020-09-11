@@ -136,7 +136,12 @@ function rotateLines(targetPoints) {
             // Get rotation angle based on the distance to the target
             let rotationAngle = Math.atan(oc / ac);
             if (ac <= 0) {
-                rotationAngle = rotationAngle - Math.PI;
+                if (oc < 0) {
+                    rotationAngle = rotationAngle - Math.PI;
+                }
+                else {
+                    rotationAngle = rotationAngle + Math.PI;
+                }
             }
             // Balance the rotation angle based on the distance to the points
             if (inflectionPoints[0] == 2) {
@@ -144,7 +149,12 @@ function rotateLines(targetPoints) {
                 let ac2 = targetPosX2 - locationRelativeToParentX;
                 let rotationAngle2 = Math.atan(oc2 / ac2);
                 if (ac2 <= 0) {
-                    rotationAngle2 = rotationAngle2 - Math.PI;
+                    if (oc2 < 0) {
+                        rotationAngle2 = rotationAngle2 - Math.PI;
+                    }
+                    else {
+                        rotationAngle2 = rotationAngle2 + Math.PI;
+                    }
                 }
                 let hyp1hyp2 = hypotenuse2 + hypotenuse;
                 rotationAngle = (1 - (hypotenuse / hyp1hyp2)) * rotationAngle + (1 - (hypotenuse2 / hyp1hyp2)) * rotationAngle2;
