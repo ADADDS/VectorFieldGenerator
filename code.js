@@ -31,10 +31,19 @@ figma.ui.onmessage = msg => {
         // Force Deviation
         // Width Contraction
         createGrid(msg);
-        rotateLines(getRandomPoint());
+        rotateLines([getRandomPoint()]);
     }
     if (msg.type === 'rotate-lines') {
-        rotateLines(getRandomPoint());
+        let randomTests = Math.floor(Math.random() * 4);
+        if (randomTests == 0) {
+            rotateLines([getRandomPoint()]);
+        }
+        else if (randomTests == 1) {
+            rotateLines([getRandomPoint(), getRandomPoint(), getRandomPoint(), getRandomPoint()]);
+        }
+        else if (randomTests > 1) {
+            rotateLines([getRandomPoint(), getRandomPoint()]);
+        }
     }
     // Make sure to close the plugin when you're done. Otherwise the plugin will
     // keep running, which shows the cancel button at the bottom of the screen.
@@ -73,11 +82,7 @@ function createGrid(msg) {
     figma.currentPage.selection = lines;
     figma.viewport.scrollAndZoomIntoView(lines);
 }
-function rotateLines(targetPoint) {
-    // Get targer point position in grid
-    let targetInArray = targetPoint[0] * nColumns + targetPoint[1];
-    let targetPosX = targetPoint[1] * paddingSize;
-    let targetPosY = targetPoint[0] * paddingSize;
+function rotateLines(targetPoints) {
     for (let i = 0; i < lines.length; i++) {
         // Reset line rotation, width and position
         lines[i].rotation = 0;
@@ -85,14 +90,27 @@ function rotateLines(targetPoint) {
         let centerPaddingOffset = paddingSize - baseWidth;
         lines[i].x = (i % nColumns) * paddingSize + centerPaddingOffset;
         lines[i].y = (Math.floor(i / nColumns)) * paddingSize + paddingSize / 2;
+        // Select target point/points
+        let inflectionPoints = selectInflectionPoints(i, targetPoints);
         // Deal with line that is a target point
-        if (i == targetInArray) {
+        if (inflectionPoints[0] == -1) {
             lines[i].resize(0.01, 0);
             lines[i].x = lines[i].x + baseWidth / 2;
         }
         // Deal with the other lines
         else {
+            let targetPosX = inflectionPoints[1][2];
+            let targetPosY = inflectionPoints[1][3];
             let hypotenuse = pointsDistance(lines[i].x, targetPosX, lines[i].y, targetPosY);
+            let targetPosX2;
+            let targetPosY2;
+            let hypotenuse2;
+            // Calculate if there are two points affecting the line
+            if (inflectionPoints[0] == 2) {
+                targetPosX2 = inflectionPoints[2][2];
+                targetPosY2 = inflectionPoints[2][3];
+                hypotenuse2 = pointsDistance(lines[i].x, targetPosX2, lines[i].y, targetPosY2);
+            }
             if (distanceResize == true) {
                 // Resize based on the distance
                 let widthResize = (paddingSize / hypotenuse) < 1 ? 3 * (paddingSize / hypotenuse) : 1;
@@ -104,7 +122,7 @@ function rotateLines(targetPoint) {
                 // Fix position based on the resize
                 lines[i].x = lines[i].x + (baseWidth - newWidth) / 2;
             }
-            // Referência p/ rotação: https://spectrum.chat/figma/extensions-and-api/relative-transform-point-of-rotation~7aa16373-9709-49b8-9145-5f3830ddfe32
+            // Rotation reference: https://spectrum.chat/figma/extensions-and-api/relative-transform-point-of-rotation~7aa16373-9709-49b8-9145-5f3830ddfe32
             // Figure out where the current line is relative to its parent
             let locationRelativeToParentX = lines[i].x;
             let locationRelativeToParentY = lines[i].y;
@@ -117,8 +135,22 @@ function rotateLines(targetPoint) {
             let ac = targetPosX - locationRelativeToParentX;
             // Get rotation angle based on the distance to the target
             let rotationAngle = Math.atan(oc / ac);
+            if (ac <= 0) {
+                rotationAngle = rotationAngle - Math.PI;
+            }
+            // Balance the rotation angle based on the distance to the points
+            if (inflectionPoints[0] == 2) {
+                let oc2 = targetPosY2 - locationRelativeToParentY;
+                let ac2 = targetPosX2 - locationRelativeToParentX;
+                let rotationAngle2 = Math.atan(oc2 / ac2);
+                if (ac2 <= 0) {
+                    rotationAngle2 = rotationAngle2 - Math.PI;
+                }
+                let hyp1hyp2 = hypotenuse2 + hypotenuse;
+                rotationAngle = (1 - (hypotenuse / hyp1hyp2)) * rotationAngle + (1 - (hypotenuse2 / hyp1hyp2)) * rotationAngle2;
+            }
             // Force Deviation reflected by Rotation "error"
-            rotationAngle += 75 * Math.PI / 180;
+            //rotationAngle = rotationAngle + 30 * Math.PI / 180;
             // Transforms to fix line position because the rotation is done around line's starting point, and not its center point
             let myTransformX = x - x * Math.cos(rotationAngle) + y * Math.sin(rotationAngle);
             let myTransformY = y - x * Math.sin(rotationAngle) - y * Math.cos(rotationAngle);
@@ -137,5 +169,58 @@ function rotateLines(targetPoint) {
 function getRandomPoint() {
     let lineRefX = Math.floor(Math.random() * nRows);
     let lineRefY = Math.floor(Math.random() * nColumns);
-    return [lineRefX, lineRefY];
+    return [lineRefX, lineRefY, lineRefY * paddingSize, lineRefX * paddingSize];
+}
+function selectInflectionPoints(lineIndex, points) {
+    // 0 inflection points
+    if (points.length < 1) {
+        return [0, null];
+    }
+    // Only one inflection point
+    else if (points.length == 1) {
+        let targetInArray = points[0][0] * nColumns + points[0][1];
+        // If current line is an inflection point
+        if (targetInArray == lineIndex) {
+            return [-1, null];
+        }
+        return [1, points[0]];
+    }
+    // At least two inflection points
+    else {
+        let pointOne;
+        let pointTwo;
+        let distances = [];
+        let smallestDistance = paddingSize * paddingSize;
+        let smallestIndex = -1;
+        for (let i = 0; i < points.length; i++) {
+            let targetInArray = points[i][0] * nColumns + points[i][1];
+            // If current line is an inflection point
+            if (targetInArray == lineIndex) {
+                return [-1, null];
+            }
+            // Find the closest inflection point to the line
+            else {
+                let distance = pointsDistance(lines[lineIndex].x, points[i][2], lines[lineIndex].y, points[i][3]);
+                distances.push(distance);
+                if (distance < smallestDistance) {
+                    smallestDistance = distance;
+                    smallestIndex = i;
+                }
+            }
+        }
+        pointOne = smallestIndex;
+        smallestIndex = -1;
+        smallestDistance = paddingSize * paddingSize;
+        // Find the second closest inflection point to the line
+        for (let j = 0; j < distances.length; j++) {
+            if (j != pointOne) {
+                if (distances[j] < smallestDistance) {
+                    smallestDistance = distances[j];
+                    smallestIndex = j;
+                }
+            }
+        }
+        pointTwo = smallestIndex;
+        return [2, points[pointOne], points[pointTwo]];
+    }
 }
