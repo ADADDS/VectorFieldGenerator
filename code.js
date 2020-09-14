@@ -31,10 +31,11 @@ figma.ui.onmessage = msg => {
         // Force Deviation
         // Width Contraction
         createGrid(msg);
-        rotateLines([getRandomPoint()]);
+        //rotateLines([getRandomPoint()]);
     }
     if (msg.type === 'rotate-lines') {
-        let randomTests = Math.floor(Math.random() * 4);
+        //let randomTests = Math.floor(Math.random()*4);
+        let randomTests = -1;
         if (randomTests == 0) {
             rotateLines([getRandomPoint()]);
         }
@@ -43,6 +44,9 @@ figma.ui.onmessage = msg => {
         }
         else if (randomTests > 1) {
             rotateLines([getRandomPoint(), getRandomPoint()]);
+        }
+        else if (randomTests == -1) {
+            rotateLines([[27, 7, 7 * paddingSize, 27 * paddingSize], [7, 20, 20 * paddingSize, 7 * paddingSize]]);
         }
     }
     // Make sure to close the plugin when you're done. Otherwise the plugin will
@@ -65,12 +69,12 @@ function createGrid(msg) {
     // Max diagonal
     let maxDistance = nRows > nColumns ? paddingSize * nRows * Math.SQRT2 : paddingSize * nColumns * Math.SQRT2;
     //let maxDistance = paddingSize*msg.count*Math.SQRT2;
-    // Create and rotate the lines in the array
+    // Create the lines in the array
     for (let i = 0; i < nRows; i++) {
         for (let j = 0; j < nColumns; j++) {
             // Create a line at the center of the padding
             const newLine = figma.createLine();
-            let centerPaddingOffset = paddingSize - baseWidth;
+            let centerPaddingOffset = (paddingSize - baseWidth) / 2;
             newLine.resize(baseWidth, 0);
             newLine.x = j * paddingSize + centerPaddingOffset;
             newLine.y = i * paddingSize + paddingSize / 2;
@@ -87,13 +91,14 @@ function rotateLines(targetPoints) {
         // Reset line rotation, width and position
         lines[i].rotation = 0;
         lines[i].resize(baseWidth, 0);
-        let centerPaddingOffset = paddingSize - baseWidth;
+        let centerPaddingOffset = (paddingSize - baseWidth) / 2;
         lines[i].x = (i % nColumns) * paddingSize + centerPaddingOffset;
         lines[i].y = (Math.floor(i / nColumns)) * paddingSize + paddingSize / 2;
         // Select target point/points
         let inflectionPoints = selectInflectionPoints(i, targetPoints);
         // Deal with line that is a target point
         if (inflectionPoints[0] == -1) {
+            console.log(lines[i].x, " ", lines[i].y, " ", i);
             lines[i].resize(0.01, 0);
             lines[i].x = lines[i].x + baseWidth / 2;
         }
@@ -123,6 +128,7 @@ function rotateLines(targetPoints) {
                 lines[i].x = lines[i].x + (baseWidth - newWidth) / 2;
             }
             // Rotation reference: https://spectrum.chat/figma/extensions-and-api/relative-transform-point-of-rotation~7aa16373-9709-49b8-9145-5f3830ddfe32
+            // and https://github.com/figma/plugin-samples/blob/master/circletext/code.ts
             // Figure out where the current line is relative to its parent
             let locationRelativeToParentX = lines[i].x;
             let locationRelativeToParentY = lines[i].y;
@@ -134,27 +140,29 @@ function rotateLines(targetPoints) {
             let oc = targetPosY - locationRelativeToParentY;
             let ac = targetPosX - locationRelativeToParentX;
             // Get rotation angle based on the distance to the target
-            let rotationAngle = Math.atan(oc / ac);
+            let rotationAngle = -Math.atan(oc / ac);
             if (ac <= 0) {
-                if (oc < 0) {
-                    rotationAngle = rotationAngle - Math.PI;
+                if (oc <= 0) {
+                    rotationAngle = Math.PI + rotationAngle;
                 }
                 else {
-                    rotationAngle = rotationAngle + Math.PI;
+                    rotationAngle = rotationAngle - Math.PI;
                 }
+                //rotationAngle = rotationAngle + Math.PI;
             }
             // Balance the rotation angle based on the distance to the points
             if (inflectionPoints[0] == 2) {
                 let oc2 = targetPosY2 - locationRelativeToParentY;
                 let ac2 = targetPosX2 - locationRelativeToParentX;
-                let rotationAngle2 = Math.atan(oc2 / ac2);
+                let rotationAngle2 = -Math.atan(oc2 / ac2);
                 if (ac2 <= 0) {
-                    if (oc2 < 0) {
-                        rotationAngle2 = rotationAngle2 - Math.PI;
-                    }
-                    else {
+                    if (oc2 <= 0) {
                         rotationAngle2 = rotationAngle2 + Math.PI;
                     }
+                    else {
+                        rotationAngle2 = rotationAngle2 - Math.PI;
+                    }
+                    //rotationAngle2 = rotationAngle2 + Math.PI;
                 }
                 let hyp1hyp2 = hypotenuse2 + hypotenuse;
                 rotationAngle = (1 - (hypotenuse / hyp1hyp2)) * rotationAngle + (1 - (hypotenuse2 / hyp1hyp2)) * rotationAngle2;
@@ -163,15 +171,36 @@ function rotateLines(targetPoints) {
             //rotationAngle = rotationAngle + 30 * Math.PI / 180;
             // Transforms to fix line position because the rotation is done around line's starting point, and not its center point
             let myTransformX = x - x * Math.cos(rotationAngle) + y * Math.sin(rotationAngle);
-            let myTransformY = y - x * Math.sin(rotationAngle) - y * Math.cos(rotationAngle);
+            let myTransformY = y + x * Math.sin(rotationAngle) - y * Math.cos(rotationAngle);
             // This is the final Transform matrix that'll do the translation + rotation
             // The final transform is [[cos(angle), sin(angle), translationX][-sin(angle), cos(angle), translationY]]
             // The angle depicted in the last comment is the rotation angle
-            let myRotationTransform = [[Math.cos(rotationAngle), -Math.sin(rotationAngle), myTransformX], [Math.sin(rotationAngle), Math.cos(rotationAngle), myTransformY]];
-            lines[i].relativeTransform = myRotationTransform;
+            //let myRotationTransform = [[Math.cos(rotationAngle), -Math.sin(rotationAngle), myTransformX],[Math.sin(rotationAngle), Math.cos(rotationAngle), myTransformY]] as Transform;
+            //lines[i].relativeTransform = myRotationTransform;
+            //let desiredX = locationRelativeToParentX + myTransformX;
+            //let desiredY = locationRelativeToParentY + myTransformY;
+            // Move to origin
+            lines[i].x = 0;
+            lines[i].y = 0;
+            //lines[i].relativeTransform = multiply(move(x, 0), lines[i].relativeTransform);
+            // Rotate the line
+            lines[i].relativeTransform = multiply(rotate(rotationAngle), lines[i].relativeTransform);
+            // Move back to the right position
+            //let desiredX = locationRelativeToParentX;
+            //let desiredY = locationRelativeToParentY;
+            //lines[i].relativeTransform = multiply(move(desiredX, desiredY), lines[i].relativeTransform);
+            //console.log(lines[i].relativeTransform, desiredX, desiredY);
+            lines[i].x = locationRelativeToParentX + myTransformX;
+            lines[i].y = locationRelativeToParentY + myTransformY;
             // Move the line back to where it was initially relative to it's parent element
-            lines[i].x = lines[i].x + locationRelativeToParentX;
-            lines[i].y = lines[i].y + locationRelativeToParentY;
+            //lines[i].x = lines[i].x + locationRelativeToParentX;
+            //lines[i].y = lines[i].y + locationRelativeToParentY;  
+            //console.log(rotationAngle);
+            /*
+            let rotationdegree = rotationAngle * 180 / Math.PI;
+            if (rotationdegree > 0) {
+              lines[i].resize(150,0);
+            }*/
         }
     }
 }
@@ -233,4 +262,27 @@ function selectInflectionPoints(lineIndex, points) {
         pointTwo = smallestIndex;
         return [2, points[pointOne], points[pointTwo]];
     }
+}
+// Combines two transforms by doing a matrix multiplication.
+// The first transform applied is a, followed by b, which
+// is normally written b * a.
+function multiply(a, b) {
+    return [
+        [a[0][0] * b[0][0] + a[0][1] * b[1][0], a[0][0] * b[0][1] + a[0][1] * b[1][1], a[0][0] * b[0][2] + a[0][1] * b[1][2] + a[0][2]],
+        [a[1][0] * b[0][0] + a[1][1] * b[1][0], a[1][0] * b[0][1] + a[1][1] * b[1][1] + 0, a[1][0] * b[0][2] + a[1][1] * b[1][2] + a[1][2]]
+    ];
+}
+// Creates a "move" transform.
+function move(x, y) {
+    return [
+        [1, 0, x],
+        [0, 1, y]
+    ];
+}
+// Creates a "rotate" transform.
+function rotate(theta) {
+    return [
+        [Math.cos(theta), Math.sin(theta), 0],
+        [-Math.sin(theta), Math.cos(theta), 0]
+    ];
 }
