@@ -37,13 +37,14 @@ figma.ui.onmessage = msg => {
     // Inflection Point
     // Force Deviation
     // Width Contraction
+    clearLines();
     createGrid(msg);
     //rotateLines([getRandomPoint()]);
   }
 
   if (msg.type === 'rotate-lines') {
     let randomTests = Math.floor(Math.random()*4);
-    //let randomTests = -1;
+    //let randomTests = 1;
     if (randomTests == 0) {
       rotateLines([getRandomPoint()]);
     }
@@ -120,24 +121,17 @@ function rotateLines(targetPoints) {
         lines[i].y = (Math.floor(i/nColumns))*paddingSize + paddingSize/2;
     
         // Select target point/points
-        let inflectionPoints = selectInflectionPoints(i, targetPoints);
+        let inflectionPoints = preprocessInflectionPoints(i, targetPoints);
     
         // Deal with line that is a target point
         if (inflectionPoints[0] == -1) {
-          console.log(lines[i].x , " " , lines[i].y , " " , i);
           lines[i].resize(0.01, 0);
           lines[i].x = lines[i].x + baseWidth/2;
         }
         // Deal with the other lines
         else {
-          let targetPosX = inflectionPoints[1][2];
-          let targetPosY = inflectionPoints[1][3];
-          let hypotenuse = pointsDistance(lines[i].x, targetPosX, lines[i].y, targetPosY);
-          let targetPosX2;
-          let targetPosY2;
-          let hypotenuse2;
-          let ocSum;
-          let acSum;
+          let ocSum = 0;
+          let acSum = 0;
     
           /*
           if (distanceResize == true) {
@@ -164,33 +158,37 @@ function rotateLines(targetPoints) {
           let x = lines[i].width/2;
           let y = 0;
     
-          // oc/hypotenuse = opposite cathetus / hypotenuse = sin(angle)
-          // ac/hypotenuse = adjacent cathetus / hypotenuse = cos(angle)
-          // Get first point deltaY and deltaX 
-          ocSum = targetPosY - locationRelativeToParentY;
-          acSum = targetPosX - locationRelativeToParentX;
           let rotationAngle;
     
           // If there's only one point affecting the Rotation
           if (inflectionPoints[0] == 1) {
-            rotationAngle = -Math.atan(ocSum/acSum);
+            // Get its OC and AC then calculate its rotation angle
+            ocSum = ocSum + inflectionPoints[2][3] - locationRelativeToParentY;
+            acSum = acSum + inflectionPoints[2][2] - locationRelativeToParentX;
+            if (acSum == 0) {
+              rotationAngle = Math.PI/2;
+            }
+            else {
+              rotationAngle = -Math.atan(ocSum/acSum);
+            }
           }
           // If there are two or more points affecting the rotation
-          else if (inflectionPoints[0] == 2 ) {
-            targetPosX2 = inflectionPoints[2][2];
-            targetPosY2 = inflectionPoints[2][3];
-            hypotenuse2 = pointsDistance(lines[i].x, targetPosX2, lines[i].y, targetPosY2);
-            let oc2 = targetPosY2 - locationRelativeToParentY;
-            let ac2 = targetPosX2 - locationRelativeToParentX;
-    
-            let oc1 = ocSum;
-            let ac1 = acSum;
-    
-            let hyp1hyp2 = hypotenuse2+hypotenuse;
-            ocSum = (1 - (hypotenuse/hyp1hyp2)) * oc1 + (1 - (hypotenuse2/hyp1hyp2)) * oc2;
-            acSum = (1 - (hypotenuse/hyp1hyp2)) * ac1 + (1 - (hypotenuse2/hyp1hyp2)) * ac2;
-    
-            rotationAngle = -Math.atan(ocSum/acSum);
+          else if (inflectionPoints[0] >= 2 ) {
+            let maxDistance = inflectionPoints[1];
+            for(let j = 2; j < inflectionPoints.length; j++) {
+              let pointAc = inflectionPoints[j][2] - locationRelativeToParentX
+              let pointOc = inflectionPoints[j][3] - locationRelativeToParentY;
+              let hypotenuse = pointsDistance(lines[i].x, inflectionPoints[j][2], lines[i].y, inflectionPoints[j][3]);
+              // Point influence is inversely proportional to its distance to the line being rotated
+              ocSum = ocSum + pointOc/Math.pow(hypotenuse,2); 
+              acSum = acSum + pointAc/Math.pow(hypotenuse,2);
+            }
+            if (acSum == 0) {
+              rotationAngle = Math.PI/2;
+            }
+            else {
+              rotationAngle = -Math.atan(ocSum/acSum);
+            }
           }
           
           // Fix rotation angle based on it's resulting quadrant
@@ -210,28 +208,17 @@ function rotateLines(targetPoints) {
           let myTransformX = x - x * Math.cos(rotationAngle) + y * Math.sin(rotationAngle);
           let myTransformY = y + x * Math.sin(rotationAngle) - y * Math.cos(rotationAngle);
     
-          //let desiredX = locationRelativeToParentX + myTransformX;
-          //let desiredY = locationRelativeToParentY + myTransformY;
-    
           // Move to origin
           lines[i].x = 0;
           lines[i].y = 0;
-          //lines[i].relativeTransform = multiply(move(x, 0), lines[i].relativeTransform);
+
           // Rotate the line
           lines[i].relativeTransform = multiply(rotate(rotationAngle), lines[i].relativeTransform);
-          
-          // Move back to the right position
-          //let desiredX = locationRelativeToParentX;
-          //let desiredY = locationRelativeToParentY;
-    
-          // Move the line back to where it was initially relative to it's parent element
-          lines[i].x = locationRelativeToParentX + myTransformX;
-          lines[i].y = locationRelativeToParentY + myTransformY;
-          
-          //lines[i].x = lines[i].x + locationRelativeToParentX;
-          //lines[i].y = lines[i].y + locationRelativeToParentY;  
-          //console.log(rotationAngle);
 
+          // Move the line back to where it was initially relative to it's parent element taking the 
+          // rotation displacement in consideration
+          lines[i].x = locationRelativeToParentX + myTransformX;
+          lines[i].y = locationRelativeToParentY + myTransformY;         
         }
       }
     }
@@ -246,10 +233,10 @@ function rotateLines(targetPoints) {
 function getRandomPoint() {
   let lineRefX = Math.floor(Math.random() * nRows);
   let lineRefY = Math.floor(Math.random() * nColumns);
-  return [lineRefX, lineRefY, lineRefY*paddingSize, lineRefX*paddingSize];
+  return [lineRefX, lineRefY, lineRefY*paddingSize + paddingSize/2, lineRefX*paddingSize + paddingSize/2];
 }
 
-function selectInflectionPoints(lineIndex, points) {
+function selectTwoClosestPoints(lineIndex, points) {
   // 0 inflection points
   if (points.length < 1) {
     return [0, null];
@@ -303,6 +290,53 @@ function selectInflectionPoints(lineIndex, points) {
   }
 }
 
+function preprocessInflectionPoints(lineIndex, points) {
+  let output = [];
+  // 0 inflection points
+  if (points.length < 1) {
+    output.push(0);
+    output.push(null);
+  }
+  // Only one inflection point
+  else if (points.length == 1) {
+    let targetInArray = points[0][0] * nColumns + points[0][1];
+    // If current line is an inflection point
+    if (targetInArray == lineIndex) {
+      output.push(-1);
+      output.push(null);
+    }
+    else {
+      let distance = pointsDistance(lines[lineIndex].x, points[0][2], lines[lineIndex].y, points[0][3])
+      output.push(1);
+      output.push(distance);
+      output.push(points[0]);
+    }
+  }
+  // At least two inflection points
+  else {
+    output.push(points.length);
+    let distancesSum = 0;
+    for (let i = 0; i < points.length; i++) {
+      let targetInArray = points[i][0] * nColumns + points[i][1];
+      // If current line is an inflection point
+      if (targetInArray == lineIndex) {
+        output = [];
+        output.push(-1);
+        output.push(null);
+        return output;
+      }
+      // Find the closest inflection point to the line
+      else {
+        let distance = pointsDistance(lines[lineIndex].x, points[i][2], lines[lineIndex].y, points[i][3]);
+        distancesSum += distance;
+        output.push(points[i]);
+      }
+    }
+    output.splice(1, 0, distancesSum);
+  }
+  return output;
+}
+
 // Combines two transforms by doing a matrix multiplication.
 // The first transform applied is a, followed by b, which
 // is normally written b * a.
@@ -331,7 +365,12 @@ function rotate(theta) {
 
 function clearLines() {
   for (let i = 0; i < lines.length; i++) {
-    lines[i].remove();
+    if (lines[i].removed) {
+      continue;
+    }
+    else {
+      lines[i].remove();
+    }
   }
   lines.splice(0, lines.length);
 }
