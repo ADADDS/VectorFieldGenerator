@@ -202,8 +202,9 @@ function rotateLines(targetPoints) {
 }
 // Return random inflection point
 function getRandomPoint() {
-    let lineRefX = Math.floor(Math.random() * nRows);
-    let lineRefY = Math.floor(Math.random() * nColumns);
+    let randomIndex = Math.random() * lines.length;
+    let lineRefX = Math.floor(randomIndex / nColumns);
+    let lineRefY = (randomIndex % nColumns);
     return [lineRefX, lineRefY, lineRefY * paddingSize + paddingSize / 2, lineRefX * paddingSize + paddingSize / 2];
 }
 function selectTwoClosestPoints(lineIndex, points) {
