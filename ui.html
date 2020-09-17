@@ -1,31 +1,70 @@
-<h2>Vector Field Made of Focken Lines of Hell</h2>
-<p>Number of Rows: <input id="rows" value="3"></p>
-<p>Number of Columns: <input id="columns" value="3"></p>
-<p>Padding size: <input id="padding" value="150"></p>
-<p>Width base size: <input id="width-size" value="100"></p>
-<button id="create">Create</button>
-<button id="cancel">Cancel</button>
-<button id="rotate">Random Rotate</button>
+<!-- Basic matrix proprierties -->
+<form method="get" id="Main">
+<section id="MatrixStructure">
+  <h4>Matrix Sctruture</h4>
+  <p>Columns: <input id="columns" type="number" min="1" max="99" step="1" placeholder="1"></p>
+  <p>Rows: <input id="rows" type="number" min="1" max="99"  step="1" placeholder="1"></p>
+  <p>Padding: <input id="padding" type="number" min="0" max="999"  step="4" placeholder="0"></p>
+  <p>Cell-size: <input id="cell-size" type="number" min="10" max="999"  step="4" placeholder="10"></p>
+</section>
+
+<!-- Visual configuration of the lines-->
+<section id="VisualSettings">
+  <h4>Visual Settings</h4>
+  <p>Color: <input id="ColorPicker" type="color" name="DefaultBlack" value="#000000"></p>
+  <p>Stroke: <input id="StrokeHeight" type="number" min="1" max="99"  step="1" placeholder="1"></p>
+
+  <label for="">RotationStrenght</label>
+  <input id="RotationStrenght" type="number" min="0" max="99" placeholder="0">
+  
+  <label>Width Reduction:</label> 
+  <!-- isso aqui vai ser um toggle, só preciso editar (a gente que vai deixar padrao o valor do width reduction)-->
+  <input id="WidthReduction" type="number" min="0" max="99" placeholder="0">
+</section>
+
+<!-- Fixed footer with generate buttons-->
+<section id="Footer">
+  <button id="ResetDefault" type="reset">ResetDefault</button>
+  <button id="cancel">Cancel</button>
+  <button id="Randomizer">Randomizer</button>
+  <button id="Generate" type="submit">Generate</button>
+</section>
+</form>
+
+<!-- essa merdinha do width ta mudando o tamanho da janela mas n altera o tamanho do iframe, 
+  fica um scroll estupido preciso ver isso dps-->
+<style>
+body{
+  height: 4030px;
+  overflow: visible;
+}
+#main{
+display: flexbox;
+}
+#MatrixStructure{
+  width:4002px;
+}
+
+
+</style>
 <script>
+  document.getElementById('create').onclick = () => {
+    const firstText = document.getElementById('rows');
+    const secontText = document.getElementById('columns');
+    const thirdText = document.getElementById('padding');
+    const fourthText = document.getElementById('width-size');
+    const rows = parseInt(firstText.value, 10);
+    const columns = parseInt(secontText.value, 10);
+    const padding = parseInt(thirdText.value, 10);
+    const widthSize = parseInt(fourthText.value, 10);
+    parent.postMessage({ pluginMessage: { type: 'create-grid', rows, columns, padding, widthSize} }, '*')
+  }
 
-document.getElementById('create').onclick = () => {
-  const firstText = document.getElementById('rows');
-  const secontText = document.getElementById('columns');
-  const thirdText = document.getElementById('padding');
-  const fourthText = document.getElementById('width-size');
-  const rows = parseInt(firstText.value, 10);
-  const columns = parseInt(secontText.value, 10);
-  const padding = parseInt(thirdText.value, 10);
-  const widthSize = parseInt(fourthText.value, 10);
-  parent.postMessage({ pluginMessage: { type: 'create-grid', rows, columns, padding, widthSize} }, '*')
-}
+  document.getElementById('cancel').onclick = () => {
+    parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+  }
 
-document.getElementById('cancel').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
-}
-
-document.getElementById('rotate').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'rotate-lines' } }, '*')
-}
-
+  document.getElementById('rotate').onclick = () => {
+    parent.postMessage({ pluginMessage: { type: 'rotate-lines' } }, '*')
+  }
 </script>
