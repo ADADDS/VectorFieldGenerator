@@ -30,11 +30,13 @@ figma.ui.onmessage = msg => {
         // Inflection Point
         // Force Deviation
         // Width Contraction
+        clearLines();
         createGrid(msg);
-        rotateLines([getRandomPoint()]);
+        //rotateLines([getRandomPoint()]);
     }
     if (msg.type === 'rotate-lines') {
         let randomTests = Math.floor(Math.random() * 4);
+        //let randomTests = 1;
         if (randomTests == 0) {
             rotateLines([getRandomPoint()]);
         }
@@ -43,6 +45,9 @@ figma.ui.onmessage = msg => {
         }
         else if (randomTests > 1) {
             rotateLines([getRandomPoint(), getRandomPoint()]);
+        }
+        else if (randomTests == -1) {
+            rotateLines([[27, 7, 7 * paddingSize, 27 * paddingSize], [7, 20, 20 * paddingSize, 7 * paddingSize]]);
         }
     }
     // Make sure to close the plugin when you're done. Otherwise the plugin will
@@ -63,14 +68,14 @@ function createGrid(msg) {
     //let elements = msg.count * msg.count;
     let elements = nRows * nColumns;
     // Max diagonal
-    let maxDistance = nRows > nColumns ? paddingSize * nRows * Math.SQRT2 : paddingSize * nColumns * Math.SQRT2;
+    let maxDistance = Math.sqrt((nRows * nRows) + (nColumns * nColumns));
     //let maxDistance = paddingSize*msg.count*Math.SQRT2;
-    // Create and rotate the lines in the array
+    // Create the lines in the array
     for (let i = 0; i < nRows; i++) {
         for (let j = 0; j < nColumns; j++) {
             // Create a line at the center of the padding
             const newLine = figma.createLine();
-            let centerPaddingOffset = paddingSize - baseWidth;
+            let centerPaddingOffset = (paddingSize - baseWidth) / 2;
             newLine.resize(baseWidth, 0);
             newLine.x = j * paddingSize + centerPaddingOffset;
             newLine.y = i * paddingSize + paddingSize / 2;
@@ -83,105 +88,126 @@ function createGrid(msg) {
     figma.viewport.scrollAndZoomIntoView(lines);
 }
 function rotateLines(targetPoints) {
-    for (let i = 0; i < lines.length; i++) {
-        // Reset line rotation, width and position
-        lines[i].rotation = 0;
-        lines[i].resize(baseWidth, 0);
-        let centerPaddingOffset = paddingSize - baseWidth;
-        lines[i].x = (i % nColumns) * paddingSize + centerPaddingOffset;
-        lines[i].y = (Math.floor(i / nColumns)) * paddingSize + paddingSize / 2;
-        // Select target point/points
-        let inflectionPoints = selectInflectionPoints(i, targetPoints);
-        // Deal with line that is a target point
-        if (inflectionPoints[0] == -1) {
-            lines[i].resize(0.01, 0);
-            lines[i].x = lines[i].x + baseWidth / 2;
+    let elementsRemoved = false;
+    for (let i = lines.length - 1; i >= 0; i--) {
+        if (lines[i].removed) {
+            lines.splice(i, 1);
+            elementsRemoved = true;
         }
-        // Deal with the other lines
         else {
-            let targetPosX = inflectionPoints[1][2];
-            let targetPosY = inflectionPoints[1][3];
-            let hypotenuse = pointsDistance(lines[i].x, targetPosX, lines[i].y, targetPosY);
-            let targetPosX2;
-            let targetPosY2;
-            let hypotenuse2;
-            // Calculate if there are two points affecting the line
-            if (inflectionPoints[0] == 2) {
-                targetPosX2 = inflectionPoints[2][2];
-                targetPosY2 = inflectionPoints[2][3];
-                hypotenuse2 = pointsDistance(lines[i].x, targetPosX2, lines[i].y, targetPosY2);
+            if (elementsRemoved == true) {
+                continue;
             }
-            if (distanceResize == true) {
-                // Resize based on the distance
-                let widthResize = (paddingSize / hypotenuse) < 1 ? 3 * (paddingSize / hypotenuse) : 1;
-                if (widthResize > 1) {
-                    widthResize = 1;
+            else {
+                // Reset line rotation, width and position
+                lines[i].rotation = 0;
+                lines[i].resize(baseWidth, 0);
+                let centerPaddingOffset = (paddingSize - baseWidth) / 2;
+                lines[i].x = (i % nColumns) * paddingSize + centerPaddingOffset;
+                lines[i].y = (Math.floor(i / nColumns)) * paddingSize + paddingSize / 2;
+                // Select target point/points
+                let inflectionPoints = preprocessInflectionPoints(i, targetPoints);
+                // Deal with line that is a target point
+                if (inflectionPoints[0] == -1) {
+                    lines[i].resize(0.01, 0);
+                    lines[i].x = lines[i].x + baseWidth / 2;
                 }
-                let newWidth = widthResize * lines[i].width;
-                lines[i].resize(newWidth, 0);
-                // Fix position based on the resize
-                lines[i].x = lines[i].x + (baseWidth - newWidth) / 2;
-            }
-            // Rotation reference: https://spectrum.chat/figma/extensions-and-api/relative-transform-point-of-rotation~7aa16373-9709-49b8-9145-5f3830ddfe32
-            // Figure out where the current line is relative to its parent
-            let locationRelativeToParentX = lines[i].x;
-            let locationRelativeToParentY = lines[i].y;
-            // Get the center of the rotation-point based on the line size
-            let x = lines[i].width / 2;
-            let y = 0;
-            // oc/hypotenuse = opposite cathetus / hypotenuse = sin(angle)
-            // ac/hypotenuse = adjacent cathetus / hypotenuse = cos(angle)
-            let oc = targetPosY - locationRelativeToParentY;
-            let ac = targetPosX - locationRelativeToParentX;
-            // Get rotation angle based on the distance to the target
-            let rotationAngle = Math.atan(oc / ac);
-            if (ac <= 0) {
-                if (oc < 0) {
-                    rotationAngle = rotationAngle - Math.PI;
-                }
+                // Deal with the other lines
                 else {
-                    rotationAngle = rotationAngle + Math.PI;
+                    let ocSum = 0;
+                    let acSum = 0;
+                    /*
+                    if (distanceResize == true) {
+                      // Resize based on the distance
+                      let widthResize = (paddingSize/hypotenuse) < 1 ? 3*(paddingSize/hypotenuse) : 1;
+                      if (widthResize > 1) {
+                        widthResize = 1;
+                      }
+                      let newWidth = widthResize*lines[i].width;
+                      lines[i].resize(newWidth, 0);
+                      // Fix position based on the resize
+                      lines[i].x = lines[i].x + (baseWidth - newWidth)/2;
+                    }
+                    */
+                    // Rotation reference: https://spectrum.chat/figma/extensions-and-api/relative-transform-point-of-rotation~7aa16373-9709-49b8-9145-5f3830ddfe32
+                    // and https://github.com/figma/plugin-samples/blob/master/circletext/code.ts
+                    // Figure out where the current line is relative to its parent
+                    let locationRelativeToParentX = lines[i].x;
+                    let locationRelativeToParentY = lines[i].y;
+                    // Get the center of the rotation-point based on the line size
+                    let x = lines[i].width / 2;
+                    let y = 0;
+                    let rotationAngle;
+                    // If there's only one point affecting the Rotation
+                    if (inflectionPoints[0] == 1) {
+                        // Get its OC and AC then calculate its rotation angle
+                        ocSum = ocSum + inflectionPoints[2][3] - locationRelativeToParentY;
+                        acSum = acSum + inflectionPoints[2][2] - locationRelativeToParentX;
+                        if (acSum == 0) {
+                            rotationAngle = Math.PI / 2;
+                        }
+                        else {
+                            rotationAngle = -Math.atan(ocSum / acSum);
+                        }
+                    }
+                    // If there are two or more points affecting the rotation
+                    else if (inflectionPoints[0] >= 2) {
+                        let maxDistance = inflectionPoints[1];
+                        for (let j = 2; j < inflectionPoints.length; j++) {
+                            let pointAc = inflectionPoints[j][2] - locationRelativeToParentX;
+                            let pointOc = inflectionPoints[j][3] - locationRelativeToParentY;
+                            let hypotenuse = pointsDistance(lines[i].x, inflectionPoints[j][2], lines[i].y, inflectionPoints[j][3]);
+                            // Point influence is inversely proportional to its distance to the line being rotated
+                            ocSum = ocSum + pointOc / Math.pow(hypotenuse, 2);
+                            acSum = acSum + pointAc / Math.pow(hypotenuse, 2);
+                        }
+                        if (acSum == 0) {
+                            rotationAngle = Math.PI / 2;
+                        }
+                        else {
+                            rotationAngle = -Math.atan(ocSum / acSum);
+                        }
+                    }
+                    // Fix rotation angle based on it's resulting quadrant
+                    if (acSum <= 0) {
+                        if (ocSum <= 0) {
+                            rotationAngle = Math.PI + rotationAngle;
+                        }
+                        else {
+                            rotationAngle = rotationAngle - Math.PI;
+                        }
+                    }
+                    // Force Deviation reflected by Rotation "error"
+                    //rotationAngle = rotationAngle + 30 * Math.PI / 180;
+                    // Transforms to fix line position because the rotation is done around line's starting point, and not its center point
+                    let myTransformX = x - x * Math.cos(rotationAngle) + y * Math.sin(rotationAngle);
+                    let myTransformY = y + x * Math.sin(rotationAngle) - y * Math.cos(rotationAngle);
+                    // Move to origin
+                    lines[i].x = 0;
+                    lines[i].y = 0;
+                    // Rotate the line
+                    lines[i].relativeTransform = multiply(rotate(rotationAngle), lines[i].relativeTransform);
+                    // Move the line back to where it was initially relative to it's parent element taking the 
+                    // rotation displacement in consideration
+                    lines[i].x = locationRelativeToParentX + myTransformX;
+                    lines[i].y = locationRelativeToParentY + myTransformY;
                 }
             }
-            // Balance the rotation angle based on the distance to the points
-            if (inflectionPoints[0] == 2) {
-                let oc2 = targetPosY2 - locationRelativeToParentY;
-                let ac2 = targetPosX2 - locationRelativeToParentX;
-                let rotationAngle2 = Math.atan(oc2 / ac2);
-                if (ac2 <= 0) {
-                    if (oc2 < 0) {
-                        rotationAngle2 = rotationAngle2 - Math.PI;
-                    }
-                    else {
-                        rotationAngle2 = rotationAngle2 + Math.PI;
-                    }
-                }
-                let hyp1hyp2 = hypotenuse2 + hypotenuse;
-                rotationAngle = (1 - (hypotenuse / hyp1hyp2)) * rotationAngle + (1 - (hypotenuse2 / hyp1hyp2)) * rotationAngle2;
-            }
-            // Force Deviation reflected by Rotation "error"
-            //rotationAngle = rotationAngle + 30 * Math.PI / 180;
-            // Transforms to fix line position because the rotation is done around line's starting point, and not its center point
-            let myTransformX = x - x * Math.cos(rotationAngle) + y * Math.sin(rotationAngle);
-            let myTransformY = y - x * Math.sin(rotationAngle) - y * Math.cos(rotationAngle);
-            // This is the final Transform matrix that'll do the translation + rotation
-            // The final transform is [[cos(angle), sin(angle), translationX][-sin(angle), cos(angle), translationY]]
-            // The angle depicted in the last comment is the rotation angle
-            let myRotationTransform = [[Math.cos(rotationAngle), -Math.sin(rotationAngle), myTransformX], [Math.sin(rotationAngle), Math.cos(rotationAngle), myTransformY]];
-            lines[i].relativeTransform = myRotationTransform;
-            // Move the line back to where it was initially relative to it's parent element
-            lines[i].x = lines[i].x + locationRelativeToParentX;
-            lines[i].y = lines[i].y + locationRelativeToParentY;
         }
+    }
+    if (elementsRemoved == true) {
+        elementsRemoved = false;
+        rotateLines(targetPoints);
     }
 }
 // Return random inflection point
 function getRandomPoint() {
-    let lineRefX = Math.floor(Math.random() * nRows);
-    let lineRefY = Math.floor(Math.random() * nColumns);
-    return [lineRefX, lineRefY, lineRefY * paddingSize, lineRefX * paddingSize];
+    let randomIndex = Math.random() * lines.length;
+    let lineRefX = Math.floor(randomIndex / nColumns);
+    let lineRefY = (randomIndex % nColumns);
+    return [lineRefX, lineRefY, lineRefY * paddingSize + paddingSize / 2, lineRefX * paddingSize + paddingSize / 2];
 }
-function selectInflectionPoints(lineIndex, points) {
+function selectTwoClosestPoints(lineIndex, points) {
     // 0 inflection points
     if (points.length < 1) {
         return [0, null];
@@ -233,4 +259,84 @@ function selectInflectionPoints(lineIndex, points) {
         pointTwo = smallestIndex;
         return [2, points[pointOne], points[pointTwo]];
     }
+}
+function preprocessInflectionPoints(lineIndex, points) {
+    let output = [];
+    // 0 inflection points
+    if (points.length < 1) {
+        output.push(0);
+        output.push(null);
+    }
+    // Only one inflection point
+    else if (points.length == 1) {
+        let targetInArray = points[0][0] * nColumns + points[0][1];
+        // If current line is an inflection point
+        if (targetInArray == lineIndex) {
+            output.push(-1);
+            output.push(null);
+        }
+        else {
+            let distance = pointsDistance(lines[lineIndex].x, points[0][2], lines[lineIndex].y, points[0][3]);
+            output.push(1);
+            output.push(distance);
+            output.push(points[0]);
+        }
+    }
+    // At least two inflection points
+    else {
+        output.push(points.length);
+        let distancesSum = 0;
+        for (let i = 0; i < points.length; i++) {
+            let targetInArray = points[i][0] * nColumns + points[i][1];
+            // If current line is an inflection point
+            if (targetInArray == lineIndex) {
+                output = [];
+                output.push(-1);
+                output.push(null);
+                return output;
+            }
+            // Find the closest inflection point to the line
+            else {
+                let distance = pointsDistance(lines[lineIndex].x, points[i][2], lines[lineIndex].y, points[i][3]);
+                distancesSum += distance;
+                output.push(points[i]);
+            }
+        }
+        output.splice(1, 0, distancesSum);
+    }
+    return output;
+}
+// Combines two transforms by doing a matrix multiplication.
+// The first transform applied is a, followed by b, which
+// is normally written b * a.
+function multiply(a, b) {
+    return [
+        [a[0][0] * b[0][0] + a[0][1] * b[1][0], a[0][0] * b[0][1] + a[0][1] * b[1][1], a[0][0] * b[0][2] + a[0][1] * b[1][2] + a[0][2]],
+        [a[1][0] * b[0][0] + a[1][1] * b[1][0], a[1][0] * b[0][1] + a[1][1] * b[1][1] + 0, a[1][0] * b[0][2] + a[1][1] * b[1][2] + a[1][2]]
+    ];
+}
+// Creates a "move" transform.
+function move(x, y) {
+    return [
+        [1, 0, x],
+        [0, 1, y]
+    ];
+}
+// Creates a "rotate" transform.
+function rotate(theta) {
+    return [
+        [Math.cos(theta), Math.sin(theta), 0],
+        [-Math.sin(theta), Math.cos(theta), 0]
+    ];
+}
+function clearLines() {
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].removed) {
+            continue;
+        }
+        else {
+            lines[i].remove();
+        }
+    }
+    lines.splice(0, lines.length);
 }
