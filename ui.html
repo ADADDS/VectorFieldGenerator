@@ -4,9 +4,9 @@
     <h4>Matrix Sctruture</h4>
 
     <div id="InputRow"><p>Columns</p><input id="columns" type="number" min="1" max="99" step="1" placeholder="1"></div>
-    <div id="InputRow"><p>Rows</p><input id="rows" type="number" min="1" max="99"  step="1" placeholder="1"></div>
-    <div id="InputRow"><p>Padding</p><input id="padding" type="number" min="0" max="999"  step="4" placeholder="0"></div>
-    <div id="InputRow"><p>Cell-size</p><input id="cell-size" type="number" min="10" max="999"  step="4" placeholder="10"></div>
+    <div id="InputRow"><p>Rows</p><input id="rows" type="number" min="1" max="99" step="1" placeholder="1"></div>
+    <div id="InputRow"><p>Padding</p><input id="padding" type="number" min="0" max="999" step="4" placeholder="0"></div>
+    <div id="InputRow"><p>Cell-size</p><input id="cell-size" type="number" min="10" max="999" step="4" placeholder="10"></div>
   </section>
 
   <section id="VisualSettings">
@@ -15,10 +15,10 @@
     <div id="InputRow"><p>Color</p> 
       <input id="ColorPicker" type="color" name="DefaultBlack" value="#000000">
       <input id="ColorHexa" type="text" placeholder="#ffffff">
-      <input id="ColorAlpha" type="number" min="1" max="100"  step="1" placeholder="100">
+      <input id="ColorAlpha" type="number" min="1" max="100" step="1" placeholder="100">
     </div>
 
-    <div id="InputRow"><p>Stroke</p><input id="StrokeHeight" type="number" min="1" max="99"  step="1" placeholder="1"></div>
+    <div id="InputRow"><p>Stroke</p><input id="stroke-weight" type="number" min="1" max="99" step="1" placeholder="1"></div>
 
     <div id="InputRow"><p>Rotation</p> 
       <label class="switch"><input type="checkbox" id="WidthReduction"><span class="slider round"></span></label>
@@ -32,9 +32,9 @@
 
 <section id="Footer">
   <button id="ResetDefault" type="reset">Reset Default</button>
-  <button class="btn-secondary" id="Randomizer">Randomizer</button>
-  <button class="btn-secondary" id="cancel">Cancel</button>
-  <button class="btn-primary" id="Generate" type="submit">Generate</button>
+  <button class="btn-secondary" id="randomizer" type="button">Randomizer</button>
+  <button class="btn-secondary" id="cancel" type="button">Cancel</button>
+  <button class="btn-primary" id="generate" type="button">Generate</button>
 </section>
 </form>
 
@@ -209,23 +209,41 @@ input{
 
 
 <script>
-  document.getElementById('create').onclick = () => {
-    const firstText = document.getElementById('rows');
-    const secontText = document.getElementById('columns');
-    const thirdText = document.getElementById('padding');
-    const fourthText = document.getElementById('width-size');
-    const rows = parseInt(firstText.value, 10);
-    const columns = parseInt(secontText.value, 10);
-    const padding = parseInt(thirdText.value, 10);
-    const widthSize = parseInt(fourthText.value, 10);
-    parent.postMessage({ pluginMessage: { type: 'create-grid', rows, columns, padding, widthSize} }, '*')
+  document.getElementById('generate').onclick = () => {
+    const rowInput = document.getElementById('rows');
+    const columnInput = document.getElementById('columns');
+    const paddingInput = document.getElementById('padding');
+    const cellSizeInput = document.getElementById('cell-size');
+    const widthSizeInput = document.getElementById('width-size');
+    const strokeWeightInput = document.getElementById('stroke-weight');
+    var rows = parseInt(rowInput.value, 10);
+    if (isNaN(rows)) {
+      rows = 3;
+    }
+    var columns = parseInt(columnInput.value, 10);
+    if (isNaN(columns)) {
+      columns = 3;
+    }
+    var padding = parseInt(paddingInput.value, 10);
+    if (isNaN(padding)) {
+      padding = 10;
+    }
+    var cellSize = parseInt(cellSizeInput.value, 10);
+    if (isNaN(cellSize)) {
+      cellSize = 60;
+    }
+    var strokeWeight = parseInt(strokeWeightInput.value, 10);
+    if (isNaN(strokeWeight)) {
+      strokeWeight = 1;
+    }
+    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight} }, '*')
   }
 
   document.getElementById('cancel').onclick = () => {
     parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
   }
 
-  document.getElementById('rotate').onclick = () => {
+  document.getElementById('randomizer').onclick = () => {
     parent.postMessage({ pluginMessage: { type: 'rotate-lines' } }, '*')
   }
 </script>

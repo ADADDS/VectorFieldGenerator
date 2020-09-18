@@ -11,6 +11,7 @@ let nColumns;
 let paddingSize;
 let baseWidth;
 let distanceResize = false;
+let strokeWeight;
 const lines = [];
 // Calls to "parent.postMessage" from within the HTML page will trigger this
 // callback. The callback will be passed the "pluginMessage" property of the
@@ -18,7 +19,7 @@ const lines = [];
 figma.ui.onmessage = msg => {
     // One way of distinguishing between different types of messages sent from
     // your HTML page is to use an object with a "type" property like this.
-    if (msg.type === 'create-grid') {
+    if (msg.type === 'generate-grid') {
         // Utiliza uma linha específica como "objetivo" para fins de testes
         // Pode mudar esses valores aqui pra escolhe qual X e Y da matriz vai ser o ponto "objetivo"
         // Rows
@@ -32,7 +33,7 @@ figma.ui.onmessage = msg => {
         // Force Deviation
         // Width Contraction
         clearLines();
-        createGrid(msg);
+        generateGrid(msg);
         //rotateLines([getRandomPoint()]);
     }
     if (msg.type === 'rotate-lines') {
@@ -60,11 +61,12 @@ figma.ui.onmessage = msg => {
 function pointsDistance(x1, x2, y1, y2) {
     return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
-function createGrid(msg) {
+function generateGrid(msg) {
     nRows = msg.rows;
     nColumns = msg.columns;
-    paddingSize = msg.padding;
-    baseWidth = msg.widthSize;
+    paddingSize = msg.padding + msg.cellSize;
+    baseWidth = msg.cellSize;
+    strokeWeight = msg.strokeWeight;
     //const lines: SceneNode[] = [];
     //let elements = msg.count * msg.count;
     let elements = nRows * nColumns;
@@ -80,6 +82,8 @@ function createGrid(msg) {
             newLine.resize(baseWidth, 0);
             newLine.x = j * paddingSize + centerPaddingOffset;
             newLine.y = i * paddingSize + paddingSize / 2;
+            //newLine.strokes = [{opacity: 0.1, color: { b: 0, g: 0, r: 1 }, type: 'SOLID' }];
+            newLine.strokeWeight = strokeWeight;
             // Add line to document and to array
             figma.currentPage.appendChild(newLine);
             lines.push(newLine);
@@ -137,7 +141,7 @@ function rotateLines(targetPoints) {
                     let locationRelativeToParentY = lines[i].y;
                     // Get the center of the rotation-point based on the line size
                     let x = lines[i].width / 2;
-                    let y = 0;
+                    let y = strokeWeight / 2;
                     let rotationAngle;
                     // If there's only one point affecting the Rotation
                     if (inflectionPoints[0] == 1) {
@@ -203,7 +207,7 @@ function rotateLines(targetPoints) {
 }
 // Return random inflection point
 function getRandomPoint() {
-    let randomIndex = Math.random() * lines.length;
+    let randomIndex = Math.floor(Math.random() * lines.length);
     let lineRefX = Math.floor(randomIndex / nColumns);
     let lineRefY = (randomIndex % nColumns);
     return [lineRefX, lineRefY, lineRefY * paddingSize + paddingSize / 2, lineRefX * paddingSize + paddingSize / 2];
