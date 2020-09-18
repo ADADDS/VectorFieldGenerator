@@ -1,52 +1,213 @@
-<!-- Basic matrix proprierties -->
 <form method="get" id="Main">
-<section id="MatrixStructure">
-  <h4>Matrix Sctruture</h4>
-  <p>Columns: <input id="columns" type="number" min="1" max="99" step="1" placeholder="1"></p>
-  <p>Rows: <input id="rows" type="number" min="1" max="99"  step="1" placeholder="1"></p>
-  <p>Padding: <input id="padding" type="number" min="0" max="999"  step="4" placeholder="0"></p>
-  <p>Cell-size: <input id="cell-size" type="number" min="10" max="999"  step="4" placeholder="10"></p>
-</section>
+<div id="MainContent">
+  <section id="MatrixStructure">
+    <h4>Matrix Sctruture</h4>
 
-<!-- Visual configuration of the lines-->
-<section id="VisualSettings">
-  <h4>Visual Settings</h4>
-  <p>Color: <input id="ColorPicker" type="color" name="DefaultBlack" value="#000000"></p>
-  <p>Stroke: <input id="StrokeHeight" type="number" min="1" max="99"  step="1" placeholder="1"></p>
+    <div id="InputRow"><p>Columns</p><input id="columns" type="number" min="1" max="99" step="1" placeholder="1"></div>
+    <div id="InputRow"><p>Rows</p><input id="rows" type="number" min="1" max="99"  step="1" placeholder="1"></div>
+    <div id="InputRow"><p>Padding</p><input id="padding" type="number" min="0" max="999"  step="4" placeholder="0"></div>
+    <div id="InputRow"><p>Cell-size</p><input id="cell-size" type="number" min="10" max="999"  step="4" placeholder="10"></div>
+  </section>
 
-  <label for="">RotationStrenght</label>
-  <input id="RotationStrenght" type="number" min="0" max="99" placeholder="0">
-  
-  <label>Width Reduction:</label> 
-  <!-- isso aqui vai ser um toggle, só preciso editar (a gente que vai deixar padrao o valor do width reduction)-->
-  <input id="WidthReduction" type="number" min="0" max="99" placeholder="0">
-</section>
+  <section id="VisualSettings">
+    <h4>Visual Settings</h4>
 
-<!-- Fixed footer with generate buttons-->
+    <div id="InputRow"><p>Color</p> 
+      <input id="ColorPicker" type="color" name="DefaultBlack" value="#000000">
+      <input id="ColorHexa" type="text" placeholder="#ffffff">
+      <input id="ColorAlpha" type="number" min="1" max="100"  step="1" placeholder="100">
+    </div>
+
+    <div id="InputRow"><p>Stroke</p><input id="StrokeHeight" type="number" min="1" max="99"  step="1" placeholder="1"></div>
+
+    <div id="InputRow"><p>Rotation</p> 
+      <label class="switch"><input type="checkbox" id="WidthReduction"><span class="slider round"></span></label>
+    </div>
+    
+    <div id="InputRow"><p>Width Reduction</p> 
+      <label class="switch"><input type="checkbox" id="WidthReduction"><span class="slider round"></span></label>
+    </div>
+  </section>
+</div>
+
 <section id="Footer">
-  <button id="ResetDefault" type="reset">ResetDefault</button>
-  <button id="cancel">Cancel</button>
-  <button id="Randomizer">Randomizer</button>
-  <button id="Generate" type="submit">Generate</button>
+  <button id="ResetDefault" type="reset">Reset Default</button>
+  <button class="btn-secondary" id="Randomizer">Randomizer</button>
+  <button class="btn-secondary" id="cancel">Cancel</button>
+  <button class="btn-primary" id="Generate" type="submit">Generate</button>
 </section>
 </form>
 
-<!-- essa merdinha do width ta mudando o tamanho da janela mas n altera o tamanho do iframe, 
-  fica um scroll estupido preciso ver isso dps-->
 <style>
 body{
-  height: 4030px;
-  overflow: visible;
-}
-#main{
-display: flexbox;
-}
-#MatrixStructure{
-  width:4002px;
+  font-family: "Inter", sans-serif;
+    font-size: 12px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
 }
 
+#VisualSettings{
+  margin-left: 40px;
+}
 
+#MainContent{
+margin-left: 40px;
+display: flex;
+margin-bottom: 40px;
+flex-direction: row;
+}
+
+#Footer{
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+padding: 0 40px 0 40px;
+
+}
+
+.btn-primary {
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 8px;
+  background: #4EB0F5;
+  color:#fff ;
+  border: none;
+  padding: 8px 16px;
+  margin: 0 8px;
+}
+
+.btn-primary:hover {
+  background: #48A6E8;
+  color:#fff ;
+}
+
+.btn-secondary {
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+  background: white;
+  color: #333333;
+  border: none;
+  padding: 8px 16px;
+  margin: 0 8px;
+  box-shadow: inset 0 0 0 1px black;
+  outline: none;
+}
+
+.btn-secondary:hover {
+  background: #F4F4F4;
+  color: #333333 ;
+}
+
+ /* The switch - the box around the slider */
+ .switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #4EB0F5;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #4EB0F5;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+} 
+
+#toggleDiv{
+  display: inline-block;
+}
+
+/* configurando as propriedades do link de reset default do formulario */
+#ResetDefault{
+background-color: white;
+border: none;
+outline: none;
+text-decoration: underline;
+color: #333;
+font-weight: 400;
+cursor: pointer;
+}
+
+/* Determina o tamanho da linha que contem label + input */ 
+#InputRow{
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+h4{
+  font-size: 14px;
+  color: #333333;
+  text-align: left;
+}
+
+/* Configura o input field pra colocar as infos*/
+input{
+  border-radius: 4px;
+  height: 24px;
+  border-color:#ccc;
+  border-width: 1px;;
+  outline: none;
+  min-width: 50px;
+  text-align: right;
+}
 </style>
+
+
+
+
 <script>
   document.getElementById('create').onclick = () => {
     const firstText = document.getElementById('rows');

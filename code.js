@@ -5,6 +5,7 @@
 // full browser environment (see documentation).
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
+figma.ui.resize(550, 350); //resizing iframe in which the UI lies
 let nRows;
 let nColumns;
 let paddingSize;
