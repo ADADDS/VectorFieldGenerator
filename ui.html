@@ -216,27 +216,38 @@ input{
     const cellSizeInput = document.getElementById('cell-size');
     const widthSizeInput = document.getElementById('width-size');
     const strokeWeightInput = document.getElementById('stroke-weight');
-    var rows = parseInt(rowInput.value, 10);
+    const colorHexInput = document.getElementById('ColorPicker');
+    const colorAlphaInput = document.getElementById('ColorAlpha');
+    let rows = parseInt(rowInput.value, 10);
     if (isNaN(rows)) {
       rows = 3;
     }
-    var columns = parseInt(columnInput.value, 10);
+    let columns = parseInt(columnInput.value, 10);
     if (isNaN(columns)) {
       columns = 3;
     }
-    var padding = parseInt(paddingInput.value, 10);
+    let padding = parseInt(paddingInput.value, 10);
     if (isNaN(padding)) {
       padding = 10;
     }
-    var cellSize = parseInt(cellSizeInput.value, 10);
+    let cellSize = parseInt(cellSizeInput.value, 10);
     if (isNaN(cellSize)) {
       cellSize = 60;
     }
-    var strokeWeight = parseInt(strokeWeightInput.value, 10);
+    let strokeWeight = parseInt(strokeWeightInput.value, 10);
     if (isNaN(strokeWeight)) {
       strokeWeight = 1;
     }
-    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight} }, '*')
+    let colorAlpha = parseInt(colorAlphaInput.value, 10);
+    if (isNaN(colorAlpha)) {
+      colorAlpha = 100;
+    }
+    let colorHex = colorHexInput.value;
+    /*if (isNaN(colorHex)) {
+      colorHex = '#000000';
+    }*/
+    let paint = paintCreator(colorHex, colorAlpha);
+    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint} }, '*')
   }
 
   document.getElementById('cancel').onclick = () => {
@@ -245,5 +256,19 @@ input{
 
   document.getElementById('randomizer').onclick = () => {
     parent.postMessage({ pluginMessage: { type: 'rotate-lines' } }, '*')
+  }
+
+  function paintCreator(hex, alpha) {
+    let red = 0, grn = 0, blu = 0, a = 0;
+    red = "0x" + hex[1] + hex[2];
+    grn = "0x" + hex[3] + hex[4];
+    blu = "0x" + hex[5] + hex[6];
+
+    red = +(red / 255);
+    grn = +(grn / 255);
+    blu = +(blu / 255);
+    a = alpha / 100;
+
+    return [{opacity: a, color: { r: red, g: grn, b: blu }, type: 'SOLID' }];
   }
 </script>

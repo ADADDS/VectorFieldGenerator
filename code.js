@@ -82,7 +82,7 @@ function generateGrid(msg) {
             newLine.resize(baseWidth, 0);
             newLine.x = j * paddingSize + centerPaddingOffset;
             newLine.y = i * paddingSize + paddingSize / 2;
-            //newLine.strokes = [{opacity: 0.1, color: { b: 0, g: 0, r: 1 }, type: 'SOLID' }];
+            newLine.strokes = msg.paint;
             newLine.strokeWeight = strokeWeight;
             // Add line to document and to array
             figma.currentPage.appendChild(newLine);
