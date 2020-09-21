@@ -89,6 +89,7 @@ function generateGrid(msg) {
             lines.push(newLine);
         }
     }
+    figma.group(lines, figma.currentPage);
     figma.currentPage.selection = lines;
     figma.viewport.scrollAndZoomIntoView(lines);
 }
