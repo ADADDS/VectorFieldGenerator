@@ -78,6 +78,7 @@ function generateGrid(msg) {
   paddingSize = msg.padding + msg.cellSize; 
   baseWidth = msg.cellSize;
   strokeWeight = msg.strokeWeight;
+  distanceResize = msg.widthReduction;
 
   //const lines: SceneNode[] = [];
   //let elements = msg.count * msg.count;
@@ -140,19 +141,33 @@ function rotateLines(targetPoints) {
           let ocSum = 0;
           let acSum = 0;
     
-          /*
           if (distanceResize == true) {
             // Resize based on the distance
-            let widthResize = (paddingSize/hypotenuse) < 1 ? 3*(paddingSize/hypotenuse) : 1;
+            let smallestDistance = selectClosestPoint(i, targetPoints);
+            let reducingFactor = smallestDistance[0] / paddingSize;
+            let widthResize;
+            let elements = nRows * nColumns;
+            let limitSquared = Math.sqrt(elements);
+            let limitSqSq = Math.sqrt(limitSquared);
+            if (reducingFactor > limitSqSq) {
+              let logPower = reducingFactor - limitSqSq + 1;
+              widthResize = 1 - Math.log(logPower);
+            }
+            else {
+              widthResize = Math.pow(reducingFactor, 2) / limitSquared;
+            }
+
             if (widthResize > 1) {
               widthResize = 1;
+            }
+            else if (widthResize < 0.2) {
+              widthResize = 0.2;
             }
             let newWidth = widthResize*lines[i].width;
             lines[i].resize(newWidth, 0);
             // Fix position based on the resize
             lines[i].x = lines[i].x + (baseWidth - newWidth)/2;
           }
-          */
     
           // Rotation reference: https://spectrum.chat/figma/extensions-and-api/relative-transform-point-of-rotation~7aa16373-9709-49b8-9145-5f3830ddfe32
           // and https://github.com/figma/plugin-samples/blob/master/circletext/code.ts
@@ -244,58 +259,31 @@ function getRandomPoint() {
   return [lineRefX, lineRefY, lineRefY*paddingSize + paddingSize/2, lineRefX*paddingSize + paddingSize/2];
 }
 
-function selectTwoClosestPoints(lineIndex, points) {
-  // 0 inflection points
-  if (points.length < 1) {
-    return [0, null];
-  }
+function selectClosestPoint(lineIndex, points) {
+  let output = [];
+  
   // Only one inflection point
-  else if (points.length == 1) {
-    let targetInArray = points[0][0] * nColumns + points[0][1];
-    // If current line is an inflection point
-    if (targetInArray == lineIndex) {
-      return [-1, null];
-    }
-    return [1, points[0]];
+  if (points.length == 1) {
+    let distance = pointsDistance(lines[lineIndex].x, points[0][2], lines[lineIndex].y, points[0][3]);
+    output.push(distance);
+    output.push(points[0]);
   }
   // At least two inflection points
   else {
-    let pointOne: number; 
-    let pointTwo: number;
-    let distances: number[] = [];
     let smallestDistance = paddingSize*paddingSize;
     let smallestIndex = -1;
     for (let i = 0; i < points.length; i++) {
-      let targetInArray = points[i][0] * nColumns + points[i][1];
-      // If current line is an inflection point
-      if (targetInArray == lineIndex) {
-        return [-1, null];
-      }
       // Find the closest inflection point to the line
-      else {
-        let distance = pointsDistance(lines[lineIndex].x, points[i][2], lines[lineIndex].y, points[i][3]);
-        distances.push(distance);
-        if (distance < smallestDistance) {
-          smallestDistance = distance;
-          smallestIndex = i;
-        }
+      let distance = pointsDistance(lines[lineIndex].x, points[i][2], lines[lineIndex].y, points[i][3]);
+      if (distance < smallestDistance) {
+        smallestDistance = distance;
+        smallestIndex = i;
       }
     }
-    pointOne = smallestIndex;
-    smallestIndex = -1;
-    smallestDistance = paddingSize*paddingSize;
-    // Find the second closest inflection point to the line
-    for (let j = 0; j < distances.length; j++) {
-      if (j != pointOne) {
-        if (distances[j] < smallestDistance) {
-          smallestDistance = distances[j];
-          smallestIndex = j;
-        }
-      }
-    }
-    pointTwo = smallestIndex;
-    return [2, points[pointOne], points[pointTwo]];
+    output.push(smallestDistance);
+    output.push(points[smallestIndex]);
   }
+  return output;
 }
 
 function preprocessInflectionPoints(lineIndex, points) {

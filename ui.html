@@ -21,7 +21,7 @@
     <div id="InputRow"><p>Stroke</p><input id="stroke-weight" type="number" min="1" max="99" step="1" placeholder="1"></div>
 
     <div id="InputRow"><p>Rotation</p> 
-      <label class="switch"><input type="checkbox" id="WidthReduction"><span class="slider round"></span></label>
+      <label class="switch"><input type="checkbox" id="PassiveRotation"><span class="slider round"></span></label>
     </div>
     
     <div id="InputRow"><p>Width Reduction</p> 
@@ -218,6 +218,7 @@ input{
     const strokeWeightInput = document.getElementById('stroke-weight');
     const colorHexInput = document.getElementById('ColorPicker');
     const colorAlphaInput = document.getElementById('ColorAlpha');
+    const WidthReductionInput = document.getElementById('WidthReduction');
     let rows = parseInt(rowInput.value, 10);
     if (isNaN(rows)) {
       rows = 3;
@@ -247,7 +248,8 @@ input{
       colorHex = '#000000';
     }*/
     let paint = paintCreator(colorHex, colorAlpha);
-    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint} }, '*')
+    let widthReduction = WidthReductionInput.checked;
+    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, widthReduction} }, '*')
   }
 
   document.getElementById('cancel').onclick = () => {
