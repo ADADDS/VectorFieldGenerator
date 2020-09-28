@@ -14,7 +14,7 @@
 
     <div id="InputRow"><p>Color</p> 
       <input id="ColorPicker" type="color" name="DefaultBlack" value="#000000">
-      <input id="ColorHexa" type="text" placeholder="#ffffff">
+      <input id="ColorHexa" type="text" placeholder="#000000">
       <input id="ColorAlpha" type="number" min="1" max="100" step="1" placeholder="100">
     </div>
 
@@ -244,9 +244,6 @@ input{
       colorAlpha = 100;
     }
     let colorHex = colorHexInput.value;
-    /*if (isNaN(colorHex)) {
-      colorHex = '#000000';
-    }*/
     let paint = paintCreator(colorHex, colorAlpha);
     let widthReduction = WidthReductionInput.checked;
     parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, widthReduction} }, '*')
@@ -258,6 +255,14 @@ input{
 
   document.getElementById('randomizer').onclick = () => {
     parent.postMessage({ pluginMessage: { type: 'rotate-lines' } }, '*')
+  }
+
+  document.getElementById('ColorPicker').onchange = (evt) => {
+    document.getElementById('ColorHexa').value = evt.srcElement.value
+  }
+
+  document.getElementById('ColorHexa').onchange = (evt) => {
+    document.getElementById('ColorPicker').value = evt.srcElement.value
   }
 
   function paintCreator(hex, alpha) {
