@@ -96,6 +96,10 @@ function generateGrid(msg) {
 }
 function rotateLines(targetPoints) {
     let elementsRemoved = false;
+    let elements = nRows * nColumns;
+    if (targetPoints.length > elements) {
+        targetPoints.splice(elements, (targetPoints.length - elements));
+    }
     for (let i = lines.length - 1; i >= 0; i--) {
         if (lines[i].removed) {
             lines.splice(i, 1);
@@ -128,21 +132,58 @@ function rotateLines(targetPoints) {
                         let smallestDistance = selectClosestPoint(i, targetPoints);
                         let reducingFactor = smallestDistance[0] / paddingSize;
                         let widthResize;
-                        let elements = nRows * nColumns;
+                        //let elements = nRows * nColumns;
                         let limitSquared = Math.sqrt(elements);
-                        let limitSqSq = Math.sqrt(limitSquared);
-                        if (reducingFactor > limitSqSq) {
+                        // Colmuns/Rows <= 12
+                        /*if (limitSquared <= 12) {
+                          widthResize = 1 - reducingFactor/limitSquared
+                        }
+                        // 6 < Columns/Rows <= 12
+                        else if(limitSquared <= 12) {
+                          let limitSqSq = Math.sqrt(limitSquared);
+                          if (reducingFactor > limitSqSq) {
                             let logPower = reducingFactor - limitSqSq + 1;
                             widthResize = 1 - Math.log(logPower);
+                          }
+                          else {
+                            widthResize = Math.pow(reducingFactor, 2) / limitSquared;
+                          }
+                        }
+                        // Columns/Rows > 12
+                        else {
+                          if (reducingFactor <= 4) {
+                            widthResize = reducingFactor/4
+                          }
+                          else {
+                            widthResize = 1.6 - (Math.log(reducingFactor*reducingFactor))/4
+                          }
+                        }*/
+                        if (limitSquared < 10) {
+                            widthResize = 1 - reducingFactor / limitSquared;
+                        }
+                        else if (limitSquared >= 10 && limitSquared < 20) {
+                            if (reducingFactor <= 3) {
+                                widthResize = Math.pow(reducingFactor, 2) / 9;
+                            }
+                            else {
+                                widthResize = 1 - Math.log((reducingFactor - 2)) / 2.5;
+                            }
                         }
                         else {
-                            widthResize = Math.pow(reducingFactor, 2) / limitSquared;
+                            /*
+                            if (reducingFactor <= 4) {
+                              widthResize = Math.pow(reducingFactor, 2)/16
+                            }
+                            else {
+                              widthResize = 1/Math.log10(reducingFactor) - 0.6;
+                            }*/
+                            widthResize = 1 / Math.log10(reducingFactor + 1) - 0.6;
                         }
                         if (widthResize > 1) {
                             widthResize = 1;
                         }
-                        else if (widthResize < 0.2) {
-                            widthResize = 0.2;
+                        else if (widthResize < 0.15) {
+                            widthResize = 0.15;
                         }
                         let newWidth = widthResize * lines[i].width;
                         lines[i].resize(newWidth, 0);
@@ -237,7 +278,7 @@ function selectClosestPoint(lineIndex, points) {
     }
     // At least two inflection points
     else {
-        let smallestDistance = paddingSize * paddingSize;
+        let smallestDistance = Number.POSITIVE_INFINITY;
         let smallestIndex = -1;
         for (let i = 0; i < points.length; i++) {
             // Find the closest inflection point to the line
