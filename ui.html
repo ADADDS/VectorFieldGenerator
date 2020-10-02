@@ -3,11 +3,11 @@
 * Mexer no focus dos inputs
 * Mexer na aparencia do texto do placeholder
 * Pq diabos meus ícones n carregam??? vsf
-* Adicionar comando pra fechar com ESC
+* (CHECK)Adicionar comando pra fechar com ESC
 * Preciso de 1 nome melhor pra linha Lineinfo
-* Tirei o colorpicker até conseguir editar ele pq tava feio pra caralho e é meio mongao pq aparece na esquerda ali, sei lá
-* O valor que tá como default podia já tá meio inputado default se a pessoa só clicar em generate ja rodava com ele?
-* Tirar underline do reset default e por só no hover
+* (CHECK)Tirei o colorpicker até conseguir editar ele pq tava feio pra caralho e é meio mongao pq aparece na esquerda ali, sei lá
+* (CHECK)O valor que tá como default podia já tá meio inputado default se a pessoa só clicar em generate ja rodava com ele?
+* (CHECK)Tirar underline do reset default e por só no hover
 * Hover dos inputs?
 -->
 <form method="get" id="Main">
@@ -313,6 +313,11 @@ input{
     parent.postMessage({ pluginMessage: { type: 'rotate-lines' } }, '*')
   }
 
+  document.addEventListener('keydown', (e) => {
+    if (e.key == "Esc" || e.key == "Escape") {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+    }
+  })
   /*
   document.getElementById('ColorPicker').onchange = (evt) => {
     document.getElementById('ColorHexa').value = evt.srcElement.value
