@@ -210,11 +210,16 @@ background-color: white;
 border: none;
 outline: none;
 margin: 0px;
-text-decoration: underline;
+/*text-decoration: underline;*/
 color: #333;
 font-weight: 400;
 cursor: pointer;
 }
+
+#ResetDefault:hover{
+text-decoration: underline;
+}
+
 
 /* Determina o tamanho da linha que contem label + input */ 
 #InputRow{
@@ -262,51 +267,85 @@ input{
     const cellSizeInput = document.getElementById('cell-size');
     const widthSizeInput = document.getElementById('width-size');
     const strokeWeightInput = document.getElementById('stroke-weight');
-    const colorHexInput = document.getElementById('ColorPicker');
+    //const colorHexInput = document.getElementById('ColorPicker');
+    const colorHexInput = document.getElementById('ColorHexa');
     const colorAlphaInput = document.getElementById('ColorAlpha');
     const WidthReductionInput = document.getElementById('WidthReduction');
     let rows = parseInt(rowInput.value, 10);
     if (isNaN(rows)) {
-      rows = 3;
+      rows = parseInt(rowInput.placeholder, 10);
     }
     let columns = parseInt(columnInput.value, 10);
     if (isNaN(columns)) {
-      columns = 3;
+      columns = parseInt(columnInput.placeholder, 10);
     }
     let padding = parseInt(paddingInput.value, 10);
     if (isNaN(padding)) {
-      padding = 10;
+      padding = parseInt(paddingInput.placeholder, 10);
     }
     let cellSize = parseInt(cellSizeInput.value, 10);
     if (isNaN(cellSize)) {
-      cellSize = 60;
+      cellSize = parseInt(cellSizeInput.placeholder, 10);
     }
     let strokeWeight = parseInt(strokeWeightInput.value, 10);
     if (isNaN(strokeWeight)) {
-      strokeWeight = 1;
+      strokeWeight = parseInt(strokeWeightInput.placeholder, 10);
     }
     let colorAlpha = parseInt(colorAlphaInput.value, 10);
     if (isNaN(colorAlpha)) {
-      colorAlpha = 100;
+      colorAlpha = parseInt(colorAlphaInput.placeholder, 10);
     }
     let colorHex = colorHexInput.value;
+    if (!isValidHexa(colorHex)) {
+      colorHex = colorHexInput.placeholder
+    }
+    else {
+      if (colorHex.length == 6)
+      colorHex = "#" + colorHex
+    }
     let paint = paintCreator(colorHex, colorAlpha);
     let widthReduction = WidthReductionInput.checked;
     parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, widthReduction} }, '*')
   }
 
- 
 
   document.getElementById('randomizer').onclick = () => {
     parent.postMessage({ pluginMessage: { type: 'rotate-lines' } }, '*')
   }
 
+  /*
   document.getElementById('ColorPicker').onchange = (evt) => {
     document.getElementById('ColorHexa').value = evt.srcElement.value
   }
 
   document.getElementById('ColorHexa').onchange = (evt) => {
     document.getElementById('ColorPicker').value = evt.srcElement.value
+  }
+*/
+  function isValidHexa(string) {
+    let possibleHexa
+    if (string.length == 7) {
+      if (string[0] == '#') {
+        possibleHexa = string.slice(1)
+      }
+      else {
+        return false
+      }
+    }
+    else if (string.length == 6) {
+      possibleHexa = string
+    }
+    else {
+      return false
+    }
+
+    let regexp = /[0-9A-Fa-f]{6}/
+    if (regexp.test(possibleHexa)) {
+      return true
+    }
+    else {
+      return false
+    }
   }
 
   function paintCreator(hex, alpha) {
