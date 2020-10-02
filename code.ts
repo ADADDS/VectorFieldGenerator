@@ -7,7 +7,7 @@
 
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
-figma.ui.resize(550,350); //resizing iframe in which the UI lies
+figma.ui.resize(600,380); //resizing iframe in which the UI lies
 
 let nRows: number;
 let nColumns: number;
