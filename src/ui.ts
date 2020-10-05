@@ -94,7 +94,7 @@ function isValidHexa(string) {
 }
 
 function paintCreator(hex, alpha) {
-    let red = 0, grn = 0, blu = 0, a = 0;
+    let red:any = 0, grn:any = 0, blu:any = 0, a:number = 0;
     red = "0x" + hex[1] + hex[2];
     grn = "0x" + hex[3] + hex[4];
     blu = "0x" + hex[5] + hex[6];
