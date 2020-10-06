@@ -1,20 +1,3 @@
-<!--  
-****** TO DOS ******
-* Mexer no focus dos inputs
-* Mexer na aparencia do texto do placeholder
-* Preciso de 1 nome melhor pra linha Lineinfo
-* Hover dos inputs?
-* Tirar o ícone do Color e botar o colorpicker thumbnail (???) no lugar
-* Arrumar os ícones de todos os elementos
-* Ícone do cell-size tá bugado -- só substituir dps de re-exportar o novo
-* Randomizer sempre matrix nxn, cor n mexe, tem q ter a restricao de n
-* dá pra gerar no centro do viewport? se nao, tudo bem 
-*input do hexa nao pode ter + de 6 caracteres
-* toaster de erro?
-* ERROS: VARIOS pensar em todos + vai ser tooltip na esquerda (!), 
-* botao da disabled quando tem erro
-* fazer o popup ;o 
--->
 <form method="get" id="Main">
 <div id="MainContent">
   <section id="MatrixStructure">
@@ -28,11 +11,10 @@
   <section id="VisualSettings">
     <h4>Visual Settings</h4>
 
-    <div id="InputRow"><div id="lineinfo"> <img src="<%= require('./images/size.svg') %>" width="24" height="24"> <p>Color</p> </div>
-      <input id="ColorPicker" type="color" name="DefaultBlack" value="#000000">
+    <div id="InputRow"><div id="lineinfo"> <input id="ColorPicker" type="color" name="DefaultBlack" value="#000000"> <p>Color</p> </div>
       <div id="colorinputwraper">
         <input id="ColorHexa" type="text" placeholder="#000000">
-        <input id="ColorAlpha" type="number" min="1" max="100">
+        <input id="ColorAlpha" type="number" min="0" max="100">
       </div>
     </div>
 

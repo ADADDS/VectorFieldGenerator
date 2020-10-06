@@ -10,9 +10,14 @@ body{
     margin-left: 40px;
 }
 
-/* isso aqui determina a distancia entre o icone e o texto da linha */
-p{
+p {
     padding-left: 8px;
+}
+
+h4{
+    font-size: 14px;
+    color: #333333;
+    text-align: left;
 }
 
 #MainContent{
@@ -22,6 +27,61 @@ p{
     margin-top: 16px;
     flex-direction: row;
 }
+
+/********* INPUTS ********/ 
+
+input:focus {
+    border-color:#48A6E8;
+    border-width: 2px;
+    outline: none;
+  }
+
+  input:hover {
+    border-color: #868686;
+    border-width: 1px;
+    outline: none;
+  }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 3px;
+}
+
+input{
+    height: 32px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 50px;
+    text-align: right;
+}
+
+/******** INPUT COLOR *****/
+#ColorHexa{
+    width: 70px;
+    padding-right:2px;
+}
+#ColorPicker{
+    height: 24px;
+    width:24px;
+    cursor: pointer;
+    border: none; /* mantendo aqui só pra debugar */
+
+}
+
+#ColorPicker::-webkit-color-swatch-wrapper {
+    padding: 0px;
+    margin: 0px;
+    
+}
+#ColorPicker::-webkit-color-swatch {
+    border: none; /* tira a bordinha do color picker */
+    height: 20px;
+    width: 20px;
+    border-radius: 4px;
+
+}
+
 #colorinputwraper{
     display: flex;
     justify-content: flex-end;
@@ -48,6 +108,7 @@ p{
     margin-left: 10px;;
 }
 
+
 .btn-primary {
     cursor: pointer;
     font-size: 14px;
@@ -57,6 +118,8 @@ p{
     border: none;
     padding: 8px 16px;
 }
+
+/********* BUTTONS ********/ 
 
 .btn-primary:hover {
     background: #48A6E8;
@@ -81,7 +144,7 @@ p{
     color: #333333 ;
 }
 
-/* The switch - the box around the slider */
+/********* TOGGLE ********/ 
 .switch {
     position: relative;
     display: inline-block;
@@ -148,13 +211,14 @@ input:checked + .slider:before {
     display: inline-block;
 }
 
-/* configurando as propriedades do link de reset default do formulario */
+
+/********* RESET ********/ 
+
 #ResetDefault{
     background-color: white;
     border: none;
     outline: none;
     margin: 0px;
-    /*text-decoration: underline;*/
     color: #333;
     font-weight: 400;
     cursor: pointer;
@@ -165,7 +229,8 @@ input:checked + .slider:before {
 }
 
 
-/* Determina o tamanho da linha que contem label + input */ 
+/********* CONTENT ROWS ********/ 
+
 #InputRow{
     width: 240px;
     height: 32px;
@@ -180,20 +245,4 @@ input:checked + .slider:before {
     justify-content: flex-start;
     align-items: center;
     height: 32px;
-}
-
-h4{
-    font-size: 14px;
-    color: #333333;
-    text-align: left;
-}
-
-/* Configura o input field pra colocar as infos*/
-input{
-    height: 32px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    min-width: 50px;
-    max-width: 70px;
-    text-align: right;
 }
