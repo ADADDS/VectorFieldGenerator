@@ -15,6 +15,9 @@ let paddingSize: number;
 let baseWidth: number;
 let distanceResize = false;
 let strokeWeight: number;
+let startingPoint = { 
+  x: 0, y: 0 
+};
 const lines: SceneNode[] = [];
 
 // Calls to "parent.postMessage" from within the HTML page will trigger this
@@ -79,6 +82,8 @@ function generateGrid(msg) {
   baseWidth = msg.cellSize;
   strokeWeight = msg.strokeWeight;
   distanceResize = msg.widthReduction;
+  startingPoint.x = figma.viewport.center.x - (nColumns/2) * paddingSize;
+  startingPoint.y = figma.viewport.center.y - (nRows/2) * paddingSize;
 
   //const lines: SceneNode[] = [];
   //let elements = msg.count * msg.count;
@@ -94,8 +99,8 @@ function generateGrid(msg) {
       const newLine = figma.createLine();
       let centerPaddingOffset = (paddingSize - baseWidth)/2;
       newLine.resize(baseWidth, 0);
-      newLine.x = j*paddingSize + centerPaddingOffset;
-      newLine.y = i*paddingSize + paddingSize/2;
+      newLine.x = j*paddingSize + centerPaddingOffset + startingPoint.x;
+      newLine.y = i*paddingSize + paddingSize/2 + startingPoint.y;
       newLine.strokes = msg.paint;
       newLine.strokeWeight = strokeWeight;
       
@@ -106,7 +111,7 @@ function generateGrid(msg) {
   }
   figma.group(lines, figma.currentPage);
   figma.currentPage.selection = lines;
-  figma.viewport.scrollAndZoomIntoView(lines);
+  //figma.viewport.scrollAndZoomIntoView(lines);
 }
 
 function rotateLines(targetPoints) {
@@ -130,8 +135,8 @@ function rotateLines(targetPoints) {
         lines[i].rotation = 0;
         lines[i].resize(baseWidth, 0);
         let centerPaddingOffset = (paddingSize - baseWidth)/2;
-        lines[i].x = (i%nColumns)*paddingSize + centerPaddingOffset;
-        lines[i].y = (Math.floor(i/nColumns))*paddingSize + paddingSize/2;
+        lines[i].x = (i%nColumns)*paddingSize + centerPaddingOffset + startingPoint.x;
+        lines[i].y = (Math.floor(i/nColumns))*paddingSize + paddingSize/2 + startingPoint.y;
     
         // Select target point/points
         let inflectionPoints = preprocessInflectionPoints(i, targetPoints);
@@ -299,7 +304,9 @@ function getRandomPoint() {
   let randomIndex = Math.floor(Math.random() * lines.length);
   let lineRefX = Math.floor(randomIndex/nColumns);
   let lineRefY = (randomIndex%nColumns);
-  return [lineRefX, lineRefY, lineRefY*paddingSize + paddingSize/2, lineRefX*paddingSize + paddingSize/2];
+  let pointPosX = lineRefY * paddingSize + paddingSize/2 + startingPoint.x;
+  let pointPosY = lineRefX * paddingSize + paddingSize/2 + startingPoint.y;
+  return [lineRefX, lineRefY, pointPosX, pointPosY];
 }
 
 function selectClosestPoint(lineIndex, points) {

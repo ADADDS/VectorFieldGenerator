@@ -60,11 +60,11 @@ document.addEventListener('keydown', (e) => {
 })
 
 document.getElementById('ColorPicker').onchange = (evt) => {
-    document.getElementById('ColorHexa').value = evt.srcElement.value
+    (<HTMLInputElement>document.getElementById('ColorHexa')).value = (<HTMLInputElement>evt.target).value
 }
 
 document.getElementById('ColorHexa').onchange = (evt) => {
-    document.getElementById('ColorPicker').value = evt.srcElement.value
+    (<HTMLInputElement>document.getElementById('ColorPicker')).value = (<HTMLInputElement>evt.target).value
 }
 
 function isValidHexa(string) {
