@@ -58,7 +58,7 @@ document.addEventListener('keydown', (e) => {
         parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
     }
 })
-/*
+
 document.getElementById('ColorPicker').onchange = (evt) => {
     document.getElementById('ColorHexa').value = evt.srcElement.value
 }
@@ -66,7 +66,7 @@ document.getElementById('ColorPicker').onchange = (evt) => {
 document.getElementById('ColorHexa').onchange = (evt) => {
     document.getElementById('ColorPicker').value = evt.srcElement.value
 }
-*/
+
 function isValidHexa(string) {
     let possibleHexa
     if (string.length == 7) {
