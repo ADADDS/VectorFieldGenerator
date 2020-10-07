@@ -1,5 +1,16 @@
 import './ui.css'
 
+const rowInput = document.getElementById('rows') as HTMLInputElement;
+const columnInput = document.getElementById('columns') as HTMLInputElement;
+const paddingInput = document.getElementById('padding') as HTMLInputElement;
+const cellSizeInput = document.getElementById('cell-size') as HTMLInputElement;
+const widthSizeInput = document.getElementById('width-size') as HTMLInputElement;
+const strokeWeightInput = document.getElementById('stroke-weight') as HTMLInputElement;
+const colorPickerInput = document.getElementById('ColorPicker') as HTMLInputElement;
+const colorHexInput = document.getElementById('ColorHexa') as HTMLInputElement;
+const colorAlphaInput = document.getElementById('ColorAlpha') as HTMLInputElement;
+const WidthReductionInput = document.getElementById('WidthReduction') as HTMLInputElement;
+
 let inputs = document.getElementsByClassName("input");
 
 function validate(event) {
@@ -52,16 +63,6 @@ function validate() {
 */
 
 document.getElementById('generate').onclick = () => {
-    const rowInput = document.getElementById('rows') as HTMLInputElement;
-    const columnInput = document.getElementById('columns') as HTMLInputElement;
-    const paddingInput = document.getElementById('padding') as HTMLInputElement;
-    const cellSizeInput = document.getElementById('cell-size') as HTMLInputElement;
-    const widthSizeInput = document.getElementById('width-size') as HTMLInputElement;
-    const strokeWeightInput = document.getElementById('stroke-weight') as HTMLInputElement;
-    //const colorHexInput = document.getElementById('ColorPicker');
-    const colorHexInput = document.getElementById('ColorHexa') as HTMLInputElement;
-    const colorAlphaInput = document.getElementById('ColorAlpha') as HTMLInputElement;
-    const WidthReductionInput = document.getElementById('WidthReduction') as HTMLInputElement;
     let rows = parseInt(rowInput.value, 10);
     if (isNaN(rows)) {
         rows = parseInt(rowInput.placeholder, 10);
@@ -88,7 +89,7 @@ document.getElementById('generate').onclick = () => {
     }
     let colorHex = colorHexInput.value;
     if (!isValidHexa(colorHex)) {
-        colorHex = colorHexInput.placeholder
+        colorHex = colorHexInput.placeholder;
     }
     else {
         if (colorHex.length == 6)
@@ -110,6 +111,15 @@ document.addEventListener('keydown', (e) => {
     }
 })
 
+colorPickerInput.addEventListener("change", (evt) => {
+    colorHexInput.value = colorPickerInput.value;
+})
+
+colorHexInput.addEventListener("change", (evt) => {
+    colorPickerInput.value = colorHexInput.value;
+})
+
+/*
 document.getElementById('ColorPicker').onchange = (evt) => {
     (<HTMLInputElement>document.getElementById('ColorHexa')).value = (<HTMLInputElement>evt.target).value
 }
@@ -117,6 +127,7 @@ document.getElementById('ColorPicker').onchange = (evt) => {
 document.getElementById('ColorHexa').onchange = (evt) => {
     (<HTMLInputElement>document.getElementById('ColorPicker')).value = (<HTMLInputElement>evt.target).value
 }
+*/
 
 function isValidHexa(string) {
     let possibleHexa
