@@ -116,7 +116,10 @@ colorPickerInput.addEventListener("change", (evt) => {
 })
 
 colorHexInput.addEventListener("change", (evt) => {
-    colorPickerInput.value = colorHexInput.value;
+    if (colorHexInput.value.length < 6) {
+        colorHexInput.value = completeHexa(colorHexInput.value);
+    }
+   colorPickerInput.value = colorHexInput.value;
 })
 
 /*
@@ -169,17 +172,19 @@ function paintCreator(hex, alpha) {
     return [{opacity: a, color: { r: red, g: grn, b: blu }, type: 'SOLID' }];
 }
 
-function completeHexa(){
-    let initialInput: string = (<HTMLInputElement>document.getElementById("ColorHexa")).value;
+
+
+function completeHexa(initialInput: string){
     let finalInput: string; 
 
-    if (initialInput.length < 6 && initialInput.length != 2) {
-        finalInput = initialInput + initialInput[(initialInput.length) - 1].repeat(6 - initialInput.length); 
-    }
-    
     if (initialInput.length == 2) {
         finalInput = initialInput.repeat(3); 
+    }
+    else if (initialInput.length < 6) {
+        finalInput = initialInput + initialInput[(initialInput.length) - 1].repeat(6 - initialInput.length); 
     }
 
     return finalInput;  
 }  
+
+//    let initialInput: string = colorHexInput.value;
