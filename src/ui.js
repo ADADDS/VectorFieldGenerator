@@ -98,3 +98,15 @@ function paintCreator(hex, alpha) {
     a = alpha / 100;
     return [{ opacity: a, color: { r: red, g: grn, b: blu }, type: 'SOLID' }];
 }
+
+// desculpa
+function validate() {
+    var InputColumns = document.getElementsByClassName('columns').value;
+    if (InputColumns < 0) {
+        // o inputcolumns_negative_number ia ser o id da div que tem o icone (!) e a mensagem especifica pra esse caso 
+        $('InputColumns_negative_number').show();
+        return true;
+    }else {
+        return false;
+    }
+}

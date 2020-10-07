@@ -6,8 +6,9 @@ body{
     flex-direction: column;
 }
 
+
 #VisualSettings{
-    margin-left: 40px;
+    margin-left: 64px;
 }
 
 p {
@@ -15,15 +16,16 @@ p {
 }
 
 h4{
-    font-size: 14px;
+    font-size: 18px;
     color: #333333;
     text-align: left;
+    font-weight: 400;
 }
 
 #MainContent{
     margin-left: 40px;
     display: flex;
-    margin-bottom: 24;
+    margin-bottom: 24px;
     margin-top: 16px;
     flex-direction: row;
 }
@@ -32,7 +34,7 @@ h4{
 
 input:focus {
     border-color:#48A6E8;
-    border-width: 2px;
+    border-width: 1px;
     outline: none;
   }
 
@@ -56,30 +58,37 @@ input{
     text-align: right;
 }
 
+/****** INPUT ERROR ******/
+input:invalid{
+    border-color: #DD0830;
+    border-width: 1px;
+    outline: none;
+}
+
+
+
 /******** INPUT COLOR *****/
 #ColorHexa{
     width: 70px;
-    padding-right:2px;
+    padding-right:10px;
 }
 #ColorPicker{
     height: 24px;
     width:24px;
     cursor: pointer;
-    border: none; /* mantendo aqui só pra debugar */
-
+    border: none;
 }
 
 #ColorPicker::-webkit-color-swatch-wrapper {
     padding: 0px;
     margin: 0px;
-    
 }
+
 #ColorPicker::-webkit-color-swatch {
     border: none; /* tira a bordinha do color picker */
     height: 20px;
     width: 20px;
     border-radius: 4px;
-
 }
 
 #colorinputwraper{
@@ -105,7 +114,7 @@ input{
 
 
 #ColorAlpha{
-    margin-left: 10px;;
+    margin-left: 8px;
 }
 
 
@@ -148,7 +157,7 @@ input{
 .switch {
     position: relative;
     display: inline-block;
-    width: 60px;
+    width: 50px;
     height: 28px;
 }
 
@@ -168,49 +177,44 @@ input{
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+    -webkit-transition: .3s;
+    transition: .3s;
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 20px;
-    width: 20px;
-    left: 4px;
-    bottom: 4px;
+    height: 16px;
+    width: 16px;
+    left: 6px;
+    bottom: 6px;
     background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
+    -webkit-transition: .3s;
+    transition: .3s;
 }
 
 input:checked + .slider {
-    background-color: #4EB0F5;
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 1px #4EB0F5;
+    background-color: #191F23;
 }
 
 input:checked + .slider:before {
-    -webkit-transform: translateX(30px);
-    -ms-transform: translateX(30px);
-    transform: translateX(30px);
+    -webkit-transform: translateX(22px);
+    -ms-transform: translateX(22px);
+    transform: translateX(22px);
 }
 
 /* Rounded sliders */
 .slider.round {
-    border-radius: 34px;
+    border-radius: 99px;
 }
 
 .slider.round:before {
-    border-radius: 50%;
+    border-radius: 99px;
 } 
 
 #toggleDiv{
     display: inline-block;
 }
-
 
 /********* RESET ********/ 
 
@@ -219,7 +223,7 @@ input:checked + .slider:before {
     border: none;
     outline: none;
     margin: 0px;
-    color: #333;
+    color: #ccc;
     font-weight: 400;
     cursor: pointer;
 }
@@ -232,8 +236,7 @@ input:checked + .slider:before {
 /********* CONTENT ROWS ********/ 
 
 #InputRow{
-    width: 240px;
-    height: 32px;
+    width: 200;
     display: flex;
     justify-content: space-between;
     align-items: center;
