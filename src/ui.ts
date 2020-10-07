@@ -158,8 +158,17 @@ function paintCreator(hex, alpha) {
     return [{opacity: a, color: { r: red, g: grn, b: blu }, type: 'SOLID' }];
 }
 
-// se a pessoa digitar um numero menor de 6 caracteres no input do color hexa, essa funcao pegar o ultimo digito e duplica até dar 6
-function completeHexa(string){
-    let possibleHexa;
+function completeHexa(){
+    let initialInput: string = (<HTMLInputElement>document.getElementById("ColorHexa")).value;
+    let finalInput: string; 
 
-}
+    if (initialInput.length < 6 && initialInput.length != 2) {
+        finalInput = initialInput + initialInput[(initialInput.length) - 1].repeat(6 - initialInput.length); 
+    }
+    
+    if (initialInput.length == 2) {
+        finalInput = initialInput.repeat(3); 
+    }
+
+    return finalInput;  
+}  
