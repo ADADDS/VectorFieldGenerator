@@ -10,6 +10,7 @@ document.getElementById('generate').onclick = () => {
     const colorHexInput = document.getElementById('ColorHexa');
     const colorAlphaInput = document.getElementById('ColorAlpha');
     const WidthReductionInput = document.getElementById('WidthReduction');
+    
     let rows = parseInt(rowInput.value, 10);
     if (isNaN(rows)) {
         rows = parseInt(rowInput.placeholder, 10);
@@ -97,6 +98,12 @@ function paintCreator(hex, alpha) {
     blu = +(blu / 255);
     a = alpha / 100;
     return [{ opacity: a, color: { r: red, g: grn, b: blu }, type: 'SOLID' }];
+}
+
+// se a pessoa digitar um numero menor de 6 caracteres no input do color hexa, essa funcao pegar o ultimo digito e duplica até dar 6
+function completeHexa(string){
+    let possibleHexa;
+
 }
 
 // desculpa
