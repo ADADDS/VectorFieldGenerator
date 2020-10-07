@@ -1,5 +1,56 @@
 import './ui.css'
 
+let inputs = document.getElementsByClassName("input");
+
+function validate(event) {
+    let inputElement: HTMLInputElement = event.target;
+    let error: HTMLElement = event.target.parentNode.getElementsByClassName("error")[0];
+    let valor = parseInt(inputElement.value, 10);
+    switch(inputElement.id) {
+        case "rows":
+            if (isNaN(valor)) {
+                error.style.display = "block";
+                error.innerHTML = "Tem que ser um numero";
+            }
+            else if (valor < 1) {
+                error.style.display = "block";
+                error.innerHTML = "Tem que ser maior que 1";
+            }
+            else if (valor <= 50) {
+                error.style.display = "none";
+            }
+            else {
+                error.style.display = "block";
+                error.innerHTML = "Tem que ser menor que 50";
+            }
+            break;
+        case "columns":
+            break;
+        case "padding":
+            break;
+        case "cell-size":
+            break;
+    }
+}
+
+for (let i=0; i < inputs.length; i++) {
+    inputs[i].addEventListener("change", validate, false);
+}
+
+// desculpa
+/*
+function validate() {
+    var InputColumns = document.getElementsByClassName('columns').value;
+    if (InputColumns < 0) {
+        // o inputcolumns_negative_number ia ser o id da div que tem o icone (!) e a mensagem especifica pra esse caso 
+        $('InputColumns_negative_number').show();
+        return true;
+    }else {
+        return false;
+    }
+}
+*/
+
 document.getElementById('generate').onclick = () => {
     const rowInput = document.getElementById('rows') as HTMLInputElement;
     const columnInput = document.getElementById('columns') as HTMLInputElement;
@@ -105,4 +156,10 @@ function paintCreator(hex, alpha) {
     a = alpha / 100;
 
     return [{opacity: a, color: { r: red, g: grn, b: blu }, type: 'SOLID' }];
+}
+
+// se a pessoa digitar um numero menor de 6 caracteres no input do color hexa, essa funcao pegar o ultimo digito e duplica até dar 6
+function completeHexa(string){
+    let possibleHexa;
+
 }
