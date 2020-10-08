@@ -16,36 +16,107 @@ let inputs = document.getElementsByClassName("input");
 function validate(event) {
     let inputElement: HTMLInputElement = event.target;
     let error: HTMLElement = event.target.parentNode.getElementsByClassName("error")[0];
-    let valor = parseInt(inputElement.value, 10);
+    let value = inputElement.value;
+    let validation: [boolean, string];
     switch(inputElement.id) {
         case "rows":
-            if (isNaN(valor)) {
-                error.style.display = "block";
-                error.innerHTML = "Tem que ser um numero";
-            }
-            else if (valor < 1) {
-                error.style.display = "block";
-                error.innerHTML = "Tem que ser maior que 1";
-            }
-            else if (valor <= 50) {
-                error.style.display = "none";
-            }
-            else {
-                error.style.display = "block";
-                error.innerHTML = "Tem que ser menor que 50";
-            }
+            validation = integerValidate(value, 1, 50);
             break;
         case "columns":
+            validation = integerValidate(value, 1, 50);
             break;
         case "padding":
-            break;
+            return;
+            //break;
         case "cell-size":
-            break;
+            return;
+            //break;
+        case "ColorPicker":
+            colorHexInput.value = colorPickerInput.value;
+            return;
+            //break;
+        case "ColorHexa":
+            validation = hexadecimalValidate(value);
+            return;
+            //break;
+        default:
+            return;
+    }
+    
+    if (validation[0] == true) {
+        error.style.display = "none"
+        inputElement.setCustomValidity("");
+    }
+    else {
+        error.style.display = "block"
+        error.innerHTML = validation[1];
+        inputElement.setCustomValidity(validation[1]);
     }
 }
 
 for (let i=0; i < inputs.length; i++) {
     inputs[i].addEventListener("change", validate, false);
+}
+
+function integerValidate(value: any, min: number, max: number): [boolean, string] {
+    let validInput: boolean = false;
+    let errorMessage: string = "";
+    let parsedValue = parseInt(value, 10);
+    
+    if (isNaN(parsedValue)) {
+        validInput = false;
+        errorMessage = "Value must be a number"
+    }
+    else if (parsedValue < min) {
+        validInput = false;
+        errorMessage = "Value must be greater than " + min.toString();
+    }
+    else if (parsedValue <= max) {
+        validInput = true;
+    }
+    else {
+        validInput = false;
+        errorMessage = "Value must be smaller than " + max.toString();
+    }
+
+    return [validInput, errorMessage];
+}
+
+function hexadecimalValidate(value: any): [boolean, string] {
+    let inputValue = value;
+    let finalHex: string;
+
+    // Check string after '#'
+    if (inputValue[0] == '#' && inputValue.length > 1) {
+        finalHex = inputValue.slice(1);
+    }
+    else {
+        finalHex = inputValue;
+    }
+
+    let regexp = /^[0-9A-Fa-f]+$/
+    // If it's a hexdecimal valid number
+    if (regexp.test(finalHex)) {
+        // Incomplete color number
+        if (finalHex.length < 6) {
+            finalHex = completeHexa(finalHex);
+        } 
+        // Invalid number, cut it to fit 6 digits
+        else if (finalHex.length > 6) {
+            finalHex = finalHex.slice(0, 6);
+        }
+        // if Length==6, it's a valid hexadecimal color number
+        finalHex = '#' + finalHex
+        colorPickerInput.value = finalHex;
+        colorHexInput.value = finalHex;
+        return [true, ""];
+    }
+    // Invalid hexadecimal number
+    else {
+        // MAKE ERROR
+        colorPickerInput.value = "#FFFFFF";
+        return [false, "Color must be a valid hexadecimal number"];
+    }
 }
 
 // desculpa
@@ -111,16 +182,48 @@ document.addEventListener('keydown', (e) => {
     }
 })
 
+/*
 colorPickerInput.addEventListener("change", (evt) => {
     colorHexInput.value = colorPickerInput.value;
 })
 
 colorHexInput.addEventListener("change", (evt) => {
-    if (colorHexInput.value.length < 6) {
-        colorHexInput.value = completeHexa(colorHexInput.value);
+    let inputValue = colorHexInput.value;
+    let finalHex: string;
+
+    // Check string after '#'
+    if (inputValue[0] == '#' && inputValue.length > 1) {
+        finalHex = inputValue.slice(1);
     }
-   colorPickerInput.value = colorHexInput.value;
+    else {
+        finalHex = inputValue;
+    }
+
+    let regexp = /^[0-9A-Fa-f]+$/
+    // If it's a hexdecimal valid number
+    if (regexp.test(finalHex)) {
+        // Incomplete color number
+        if (finalHex.length < 6) {
+            finalHex = completeHexa(finalHex);
+        } 
+        // Invalid number, cut it to fit 6 digits
+        else if (finalHex.length > 6) {
+            finalHex = finalHex.slice(0, 6);
+        }
+        // if Length==6, it's a valid hexadecimal color number
+        finalHex = '#' + finalHex
+        colorPickerInput.value = finalHex;
+        colorHexInput.value = finalHex;
+    }
+    // Invalid hexadecimal number
+    else {
+        // MAKE ERROR
+        colorPickerInput.value = "#FFFFFF";
+        console.log("ERRO");
+    }
 })
+
+*/
 
 /*
 document.getElementById('ColorPicker').onchange = (evt) => {
@@ -136,10 +239,10 @@ function isValidHexa(string) {
     let possibleHexa
     if (string.length == 7) {
         if (string[0] == '#') {
-        possibleHexa = string.slice(1)
+            possibleHexa = string.slice(1)
         }
         else {
-        return false
+            return false
         }
     }
     else if (string.length == 6) {

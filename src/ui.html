@@ -3,23 +3,23 @@
   <section id="MatrixStructure">
     <h4>Matrix Sctruture</h4>
     <!-- <input type="submit" name="submit" onclick="return validate()"/>-->
-    <div id="InputRow"><div id="lineinfo"><img src="<%= require('./images/column.svg') %>" width="24" height="24"><p>Columns</p></div><input class="input" id="columns" min="1" max="40"></div>
+    <div id="InputRow"><div id="lineinfo"><img src="<%= require('./images/column.svg') %>" width="24" height="24"><p>Columns</p></div><div class="error">Teste</div><input class="input" id="columns" min="1" max="40"></div>
     <div id="InputRow"><div id="lineinfo"><img src="<%= require('./images/rows.svg') %>" width="24" height="24"><p>Rows</p></div><div class="error">Teste</div><input class="input" id="rows" min="1" max="40"></div>
-    <div id="InputRow"><div id="lineinfo"><img src="<%= require('./images/padding.svg') %>" width="24" height="24"><p>Padding</p></div><input class="input" id="padding" min="0" max="999"></div>
-    <div id="InputRow"><div id="lineinfo"><img src="<%= require('./images/size.svg') %>" width="24" height="24"><p>Cell-size</p></div><input class="input" id="cell-size" min="1" max="999" ></div>
+    <div id="InputRow"><div id="lineinfo"><img src="<%= require('./images/padding.svg') %>" width="24" height="24"><p>Padding</p></div><div class="error">Teste</div><input class="input" id="padding" min="0" max="999"></div>
+    <div id="InputRow"><div id="lineinfo"><img src="<%= require('./images/size.svg') %>" width="24" height="24"><p>Cell-size</p></div><div class="error">Teste</div><input class="input" id="cell-size" min="1" max="999" ></div>
   </section>
 
   <section id="VisualSettings">
     <h4>Visual Settings</h4>
 
-    <div id="InputRow"><div id="lineinfo"> <input id="ColorPicker" type="color" name="DefaultBlack" value="#000000" > <p>Color</p> </div>
+    <div id="InputRow"><div id="lineinfo"> <input class="input" id="ColorPicker" type="color" name="DefaultBlack" value="#000000" > <p>Color</p> </div>
       <div id="colorinputwraper">
-        <input id="ColorHexa" type="text" maxlength="7" minlenght="6" placeholder="#000000">
-        <input id="ColorAlpha" type="number" min="0" max="100" value="100">
+        <input class="input" id="ColorHexa" type="text" maxlength="7" minlenght="6" placeholder="#000000">
+        <input class="input" id="ColorAlpha" type="number" min="0" max="100" value="100">
       </div>
     </div>
 
-    <div id="InputRow"><div id="lineinfo"> <img src="<%= require('./images/stroke.svg') %>" width="24" height="24" value="1"><p>Stroke</p></div><input id="stroke-weight" type="number" min="1" max="99" value="1"></div>
+    <div id="InputRow"><div id="lineinfo"> <img src="<%= require('./images/stroke.svg') %>" width="24" height="24" value="1"><p>Stroke</p></div><div class="error">Teste</div><input id="stroke-weight" type="number" min="1" max="99" value="1"></div>
 
     <div id="InputRow"><div id="lineinfo"> <img src="<%= require('./images/rotation.svg') %>" width="24" height="24"><p>Rotation</p> </div>
       <label class="switch"><input type="checkbox" id="PassiveRotation"><span class="slider round"></span></label>
