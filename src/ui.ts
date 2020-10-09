@@ -15,7 +15,7 @@ let inputs = document.getElementsByClassName("input");
 
 function validate(event) {
     let inputElement: HTMLInputElement = event.target;
-    let error: HTMLElement = event.target.parentNode.getElementsByClassName("error")[0];
+    let error: HTMLElement = event.target.parentNode.getElementsByClassName("errorText")[0];
     let value = inputElement.value;
     let validation: [boolean, string];
     switch(inputElement.id) {

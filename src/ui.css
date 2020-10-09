@@ -32,6 +32,46 @@ h4{
     margin-bottom: 0px;
 }
 
+/****** TOOLTIP ********/
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  
 /******* FOOOTER *******/
 
 #Footer{
@@ -56,7 +96,7 @@ h4{
     cursor: pointer;
     font-size: 14px;
     border-radius: 12px;
-    background: #4EB0F5;
+    background: #191F23;
     color:#fff ;
     border: none;
     height: 48px;
@@ -67,7 +107,7 @@ h4{
 /********* BUTTONS ********/ 
 
 .btn-primary:hover {
-    background: #48A6E8;
+    background: #4B4B4B;
     color:#fff ;
 }
 
@@ -95,7 +135,7 @@ h4{
 /********* INPUTS ********/ 
 
 input:focus {
-    border-color:#48A6E8;
+    border-color:#191F23;
     border-width: 1px;
     outline: none;
   }
@@ -109,7 +149,6 @@ input:focus {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
-  margin: 3px;
 }
 
 input{
@@ -117,6 +156,7 @@ input{
     border: 1px solid #ccc;
     border-radius: 6px;
     width: 50px;
+    padding-right: 4px;
     text-align: right;
 }
 
