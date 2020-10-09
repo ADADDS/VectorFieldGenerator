@@ -9,7 +9,9 @@ const strokeWeightInput = document.getElementById('stroke-weight') as HTMLInputE
 const colorPickerInput = document.getElementById('ColorPicker') as HTMLInputElement;
 const colorHexInput = document.getElementById('ColorHexa') as HTMLInputElement;
 const colorAlphaInput = document.getElementById('ColorAlpha') as HTMLInputElement;
-const WidthReductionInput = document.getElementById('WidthReduction') as HTMLInputElement;
+const widthReductionInput = document.getElementById('WidthReduction') as HTMLInputElement;
+const generateButton = document.getElementById("generate") as HTMLButtonElement;
+const randomizeButton = document.getElementById("randomizer") as HTMLButtonElement;
 
 let inputs = document.getElementsByClassName("input");
 
@@ -48,7 +50,7 @@ function validate(event) {
         inputElement.setCustomValidity("");
     }
     else {
-        error.style.display = "block"
+        error.style.display = "inline-block"
         error.innerHTML = validation[1];
         inputElement.setCustomValidity(validation[1]);
     }
@@ -133,7 +135,7 @@ function validate() {
 }
 */
 
-document.getElementById('generate').onclick = () => {
+generateButton.addEventListener("click", () => {
     let rows = parseInt(rowInput.value, 10);
     if (isNaN(rows)) {
         rows = parseInt(rowInput.placeholder, 10);
@@ -167,14 +169,13 @@ document.getElementById('generate').onclick = () => {
         colorHex = "#" + colorHex
     }
     let paint = paintCreator(colorHex, colorAlpha);
-    let widthReduction = WidthReductionInput.checked;
+    let widthReduction = widthReductionInput.checked;
     parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, widthReduction} }, '*')
-}
+})
 
-
-document.getElementById('randomizer').onclick = () => {
+randomizeButton.addEventListener("click", () => {
     parent.postMessage({ pluginMessage: { type: 'rotate-lines' } }, '*')
-}
+})
 
 document.addEventListener('keydown', (e) => {
     if (e.key == "Esc" || e.key == "Escape") {
