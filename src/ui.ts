@@ -10,8 +10,10 @@ const colorPickerInput = document.getElementById('ColorPicker') as HTMLInputElem
 const colorHexInput = document.getElementById('ColorHexa') as HTMLInputElement;
 const colorAlphaInput = document.getElementById('ColorAlpha') as HTMLInputElement;
 const widthReductionInput = document.getElementById('WidthReduction') as HTMLInputElement;
-const generateButton = document.getElementById("generate") as HTMLButtonElement;
-const randomizeButton = document.getElementById("randomizer") as HTMLButtonElement;
+const generateButton = document.getElementById('generate') as HTMLButtonElement;
+const randomizeButton = document.getElementById('randomizer') as HTMLButtonElement;
+
+let invalid_answers = Array(6).fill(1);
 
 let inputs = document.getElementsByClassName("input");
 
@@ -20,25 +22,40 @@ function validate(event) {
     let error: HTMLElement = event.target.parentNode.getElementsByClassName("errorText")[0];
     let value = inputElement.value;
     let validation: [boolean, string];
+    let field_number: number = -1;
     switch(inputElement.id) {
-        case "rows":
-            validation = integerValidate(value, 1, 50);
-            break;
         case "columns":
+            field_number = 0;
             validation = integerValidate(value, 1, 50);
+            //return
+            break;
+        case "rows":
+            field_number = 1;
+            validation = integerValidate(value, 1, 50);
+            //return;
             break;
         case "padding":
-            return;
-            //break;
+            field_number = 2;
+            validation = integerValidate(value, 0, 999);
+            //return;
+            break;
         case "cell-size":
-            return;
-            //break;
+            field_number = 3;
+            validation = integerValidate(value, 1, 999);
+            //return;
+            break;
+        case "stroke-weight":
+            field_number = 4;
+            validation = integerValidate(value, 1, 99);
+            //return
+            break;
+        case "ColorHexa":
+            field_number = 5;
+            validation = hexadecimalValidate(value);
+            //return;
+            break;
         case "ColorPicker":
             colorHexInput.value = colorPickerInput.value;
-            return;
-            //break;
-        case "ColorHexa":
-            validation = hexadecimalValidate(value);
             return;
             //break;
         default:
@@ -46,18 +63,37 @@ function validate(event) {
     }
     
     if (validation[0] == true) {
-        error.style.display = "none"
+        if (error != undefined) {
+            error.style.display = "none"
+        }
         inputElement.setCustomValidity("");
+        invalid_answers[field_number] = 0;
+        enableDisableButton();
     }
     else {
-        error.style.display = "inline-block"
-        error.innerHTML = validation[1];
+        if (error != undefined) {
+            error.style.display = "inline-block"
+            error.innerHTML = validation[1];
+        }
         inputElement.setCustomValidity(validation[1]);
+        invalid_answers[field_number] = 1;
+        enableDisableButton();
     }
 }
 
 for (let i=0; i < inputs.length; i++) {
     inputs[i].addEventListener("change", validate, false);
+}
+
+function enableDisableButton() {
+    for (let i = 0; i < invalid_answers.length; i++) {
+        if (invalid_answers[i] == 1) {
+            generateButton.disabled = true;
+            return false
+        }
+    }
+    generateButton.disabled = false;
+    return true;
 }
 
 function integerValidate(value: any, min: number, max: number): [boolean, string] {
