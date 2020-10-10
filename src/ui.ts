@@ -86,6 +86,7 @@ for (let i=0; i < inputs.length; i++) {
 }
 
 function enableDisableButton() {
+    console.log(invalid_answers);
     for (let i = 0; i < invalid_answers.length; i++) {
         if (invalid_answers[i] == 1) {
             generateButton.disabled = true;
