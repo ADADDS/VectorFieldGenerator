@@ -1,9 +1,16 @@
-<h1> Vector Field Generator
+<h1> Vector Field Generator</h1>
  
-<h2> How does it work
+<h2> How does it work</h2>
+
+<h2>How to colaborate</h2>
+
+<h2>Limitations</h2>
+
+<h2>Known issues</h2>
 
 
 
+Made with <3 by @lucas and @lucianoinfanti
 
 
 
