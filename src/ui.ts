@@ -6,8 +6,8 @@ const paddingInput = document.getElementById('padding') as HTMLInputElement;
 const cellSizeInput = document.getElementById('cell-size') as HTMLInputElement;
 const widthSizeInput = document.getElementById('width-size') as HTMLInputElement;
 const strokeWeightInput = document.getElementById('stroke-weight') as HTMLInputElement;
-const colorPickerInput = document.getElementById('ColorPicker') as HTMLInputElement;
-const colorHexInput = document.getElementById('ColorHexa') as HTMLInputElement;
+const colorPickerInput = document.getElementById('colorPicker') as HTMLInputElement;
+const colorHexInput = document.getElementById('colorHexa') as HTMLInputElement;
 const colorAlphaInput = document.getElementById('ColorAlpha') as HTMLInputElement;
 const widthReductionInput = document.getElementById('WidthReduction') as HTMLInputElement;
 const generateButton = document.getElementById('generate') as HTMLButtonElement;
@@ -24,7 +24,7 @@ let sliders = document.getElementsByClassName("sliderInput");
 function validate(event) {
     let inputElement: HTMLInputElement = event.target;
     let errorText = inputElement.parentElement.getElementsByClassName("errorText")[0];
-    let errorWrapper = errorText.parentElement;
+    let errorContent = errorText.parentElement;
     let value = inputElement.value;
     let validation: [boolean, string];
     let field_number: number = -1;
@@ -55,7 +55,7 @@ function validate(event) {
             validation = integerValidate(value, 1, 99);
             //return
             break;
-        case "ColorHexa":
+        case "colorHexa":
             field_number = 5;
             validation = hexadecimalValidate(value);
             //return;
@@ -66,16 +66,16 @@ function validate(event) {
     
     if (validation[0] == true) {
         hasChanged = true;
-        if (errorWrapper != undefined) {
-            errorWrapper.style.display = "none"
+        if (errorContent != undefined) {
+            errorContent.style.display = "none"
         }
         inputElement.setCustomValidity("");
         invalid_answers[field_number] = 0;
         enableDisableButton();
     }
     else {
-        if (errorWrapper != undefined) {
-            errorWrapper.style.display = "inline-block"
+        if (errorContent != undefined) {
+            errorContent.style.display = "inline-block"
             errorText.innerHTML = validation[1];
         }
         inputElement.setCustomValidity(validation[1]);
@@ -112,21 +112,21 @@ function integerValidate(value: any, min: number, max: number): [boolean, string
     
     if (!regExp.test(value)) {
         validInput = false;
-        errorMessage = "Value must be an integer number"
+        errorMessage = "Value must be an integer number" + "."
     }
     else 
     {
         let parsedValue = parseInt(value, 10);   
         if (parsedValue < min) {
             validInput = false;
-            errorMessage = "Value must be greater than " + min.toString();
+            errorMessage = "Value must be greater than " + min.toString() + ".";
         }
         else if (parsedValue <= max) {
             validInput = true;
         }
         else {
             validInput = false;
-            errorMessage = "Value must be smaller than " + max.toString();
+            errorMessage = "Value must be smaller than " + max.toString() + ".";
         }
     }
 

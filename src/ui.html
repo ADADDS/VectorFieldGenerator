@@ -9,13 +9,15 @@
           <img src="<%= require('./images/column.svg') %>" width="24" height="24">
           <p>Columns</p>
         </div>
-        <div class="error">
-          <div class="errorWrapper">
-            <img src="<%= require('./images/alert.svg') %>">
-            <span class="errorText"></span>
+        <div id="errorWrapper">
+          <div class="error">
+            <div class="errorContent">
+              <img src="<%= require('./images/alert.svg') %>" width="18" height="18">
+              <span class="errorText"></span>
+            </div>
           </div>
+          <input class="input" id="columns" min="1" max="40" value="3">
         </div>
-        <input class="input" id="columns" min="1" max="40" value="3">
       </div>
 
       <div id="inputRow">
@@ -23,13 +25,15 @@
           <img src="<%= require('./images/rows.svg') %>" width="24" height="24">
           <p>Rows</p>
         </div>
-        <div class="error">  
-          <div class="errorWrapper">
-            <img src="<%= require('./images/alert.svg') %>">
-            <span class="errorText"></span> 
-          </div> 
+        <div id="errorWrapper">
+          <div class="error">
+            <div class="errorContent">
+              <img src="<%= require('./images/alert.svg') %>" width="18" height="18">
+              <span class="errorText"></span>
+            </div>
+          </div>
+          <input class="input" id="rows" min="1" max="40" value="3">
         </div>
-        <input class="input" id="rows" min="1" max="40" value="3">
       </div>
      
       <div id="inputRow">
@@ -37,13 +41,15 @@
           <img src="<%= require('./images/padding.svg') %>" width="24" height="24">
           <p>Padding</p>
         </div>
-        <div class="error">
-          <div class="errorWrapper"> 
-            <img src="<%= require('./images/alert.svg') %>">
-            <span class="errorText"></span>
-          </div> 
+        <div id="errorWrapper">
+          <div class="error">
+            <div class="errorContent">
+              <img src="<%= require('./images/alert.svg') %>" width="18" height="18">
+              <span class="errorText"></span>
+            </div>
+          </div>
+          <input class="input" id="padding" min="0" max="999" value="30">
         </div>
-        <input class="input" id="padding" min="0" max="999" value="30">
       </div>
       
       <div id="inputRow">
@@ -51,13 +57,15 @@
           <img src="<%= require('./images/size.svg') %>" width="24" height="24">
           <p>Cell-size</p>
         </div>
-        <div class="error">
-          <div class="errorWrapper"> 
-            <img src="<%= require('./images/alert.svg') %>">
-            <span class="errorText"></span>
-          </div> 
+        <div id="errorWrapper">
+          <div class="error">
+            <div class="errorContent">
+              <img src="<%= require('./images/alert.svg') %>" width="18" height="18">
+              <span class="errorText"></span>
+            </div>
+          </div>
+          <input class="input" id="cell-size" min="1" max="1000" value="30">
         </div>
-        <input class="input" id="cell-size" min="1" max="1000" value="30">
       </div>
     </section>
 
@@ -65,17 +73,21 @@
       <h4>Visual Settings</h4>
       <div id="inputRow">
         <div id="lineDetail"> 
-          <input id="ColorPicker" type="color" name="DefaultBlack" value="#000000" > 
+          <input id="colorPicker" type="color" name="DefaultBlack" value="#000000" > 
           <p>Color</p> 
         </div>
         <div id="colorinputwraper">
           <div class="error">
-            <div class="errorWrapper"> 
-              <img src="<%= require('./images/alert.svg') %>">
-              <span class="errorText"></span>
+            <div id="errorWrapper">
+              <div class="error">
+                <div class="errorContent">
+                  <img src="<%= require('./images/alert.svg') %>" width="18" height="18">
+                  <span class="errorText"></span>
+                </div>
+              </div>
             </div> 
           </div>
-          <input class="input" id="ColorHexa" type="text" maxlength="7" minlenght="6" value="#000000">
+          <input class="input" id="colorHexa" type="text" maxlength="7" minlenght="6" value="#000000">
           <input class="input" id="ColorAlpha" type="number" min="0" max="100" value="100">
         </div>
       </div>
@@ -85,13 +97,15 @@
           <img src="<%= require('./images/stroke.svg') %>" width="24" height="24" value="1">
           <p>Stroke</p>
         </div>
-        <div class="error">
-          <div class="errorWrapper"> 
-            <!-- <img src="<%= require('./images/alert.svg') %>">-->
-            <span class="errorText"></span> 
-          </div> 
+        <div id="errorWrapper">
+          <div class="error">
+            <div class="errorContent">
+              <img src="<%= require('./images/alert.svg') %>" width="18" height="18">
+              <span class="errorText"></span>
+            </div>
+          </div>
+          <input class="input" id="stroke-weight" type="number" min="1" max="99" value="1">
         </div>
-        <input class="input" id="stroke-weight" type="number" min="1" max="99" value="1">
       </div>
 
       <div id="inputRow">

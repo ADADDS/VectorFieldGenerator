@@ -21,6 +21,7 @@ h4{
     color: #333333;
     text-align: left;
     font-weight: 400;
+    margin-top: 8px;
 }
 
 #mainContent{
@@ -32,30 +33,30 @@ h4{
 }
 
 /****** TOOLTIP ********/
-.errorWrapper {
+.errorContent {
     position: relative;
-    display: none; /* colocar hide dps */
-    border-bottom: 1px dotted black;
+    display: none;
 }
 
-.errorWrapper .errorText {
+.errorContent .errorText {
     visibility: hidden;
     width: 120px;
-    background-color: #555;
+    background-color: #191F23;
     color: #fff;
     text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
+    border-radius: 8px;
+    padding: 6px 12px 6px 12px;
     position: absolute;
     z-index: 1;
-    bottom: 125%;
+    font-size: 11px;
+    bottom: 145%;
     left: 50%;
-    margin-left: -60px;
+    margin-left: -72px;
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.35s;
 }
 
-.errorWrapper .errorText::after {
+.errorContent .errorText::after {
     content: "";
     position: absolute;
     top: 100%;
@@ -63,10 +64,10 @@ h4{
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: #555 transparent transparent transparent;
+    border-color: #191F23 transparent transparent transparent;
 }
 
-.errorWrapper:hover .errorText {
+.errorContent:hover .errorText {
     visibility: visible;
     opacity: 1;
 }
@@ -74,14 +75,13 @@ h4{
 /******* FOOOTER *******/
 
 #Footer{
-    height: 80px;
+    margin-top: 16px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding-left: 40px;
     padding-right: 40px;
-    background-color: #fcfcfc;
     margin-bottom: -16px;
 }
 
@@ -94,13 +94,11 @@ h4{
 .btn-primary {
     cursor: pointer;
     font-size: 14px;
-    border-radius: 12px;
+    border-radius: 8px;
     background: #191F23;
     color:#fff ;
     border: none;
-    height: 48px;
-    width: auto;
-    padding: 16px 24px 16px 24px;
+    padding: 12px 16px 12px 16px;
 }
 
 /********* BUTTONS ********/ 
@@ -119,17 +117,16 @@ h4{
 .btn-secondary {
     font-size: 14px;
     cursor: pointer;
-    border-radius: 12px;
-    background: #fcfcfc;
+    border-radius: 8px;
     color: #333333;
     border: none;
-    padding: 16px 24px 16px 24px;
+    padding: 12px 16px 12px 16px;
     margin-right: 12px;
     outline: none;
 }
 
 .btn-secondary:hover {
-    background: #F4F4F4;
+    background: #fafafa;
     color: #333333 ;
 }
 
@@ -157,7 +154,7 @@ input{
     border: 1px solid #ccc;
     border-radius: 6px;
     width: 50px;
-    padding-right: 4px;
+    padding-right: 6px;
     text-align: right;
 }
 
@@ -166,30 +163,34 @@ input:invalid{
     border-color: #DD0830;
     border-width: 1px;
     outline: none;
+    margin-left:8px;
 }
 
 /******** INPUT COLOR *****/
-#ColorHexa{
+#colorHexa{
     width: 70px;
     padding-right:10px;
 }
-#ColorPicker{
+#colorPicker{
+    margin-left: -1px;
     height: 24px;
-    width:24px;
+    width: 30px;
     cursor: pointer;
     border: none;
 }
 
-#ColorPicker::-webkit-color-swatch-wrapper {
+#colorPicker::-webkit-color-swatch-wrapper {
     padding: 0px;
     margin: 0px;
 }
 
-#ColorPicker::-webkit-color-swatch {
-    border: none; /* tira a bordinha do color picker */
+#colorPicker::-webkit-color-swatch {
+    border: 1px;
+    border-style: solid;
+    border-color:#ccc;
     height: 20px;
     width: 20px;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 #colorinputwraper{
@@ -268,7 +269,7 @@ input:checked + .slider:before {
 /********* RESET ********/ 
 
 #ResetDefault{
-    background-color: #fcfcfc;
+    background-color: #fff;
     border: none;
     outline: none;
     margin: 0px;
@@ -283,6 +284,12 @@ input:checked + .slider:before {
 
 
 /********* CONTENT ROWS ********/ 
+
+#errorWrapper{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
 
 #inputRow{
     width: 200;

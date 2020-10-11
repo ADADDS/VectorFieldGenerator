@@ -6,8 +6,8 @@ document.getElementById('generate').onclick = () => {
     const cellSizeInput = document.getElementById('cell-size');
     const widthSizeInput = document.getElementById('width-size');
     const strokeWeightInput = document.getElementById('stroke-weight');
-    //const colorHexInput = document.getElementById('ColorPicker');
-    const colorHexInput = document.getElementById('ColorHexa');
+    //const colorHexInput = document.getElementById('colorPicker');
+    const colorHexInput = document.getElementById('colorHexa');
     const colorAlphaInput = document.getElementById('ColorAlpha');
     const WidthReductionInput = document.getElementById('WidthReduction');
     
@@ -56,12 +56,12 @@ document.addEventListener('keydown', (e) => {
     }
 });
 /*
-document.getElementById('ColorPicker').onchange = (evt) => {
-    document.getElementById('ColorHexa').value = evt.srcElement.value
+document.getElementById('colorPicker').onchange = (evt) => {
+    document.getElementById('colorHexa').value = evt.srcElement.value
 }
 
-document.getElementById('ColorHexa').onchange = (evt) => {
-    document.getElementById('ColorPicker').value = evt.srcElement.value
+document.getElementById('colorHexa').onchange = (evt) => {
+    document.getElementById('colorPicker').value = evt.srcElement.value
 }
 */
 function isValidHexa(string) {
