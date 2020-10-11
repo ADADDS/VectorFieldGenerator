@@ -1,5 +1,5 @@
 <h1> Vector Field Generator</h1>
-Is a customizable vector field generator created with [Figma Plugin API] (https://www.figma.com/plugin-docs/intro/).
+Is a customizable vector field generator created with [Figma Plugin API](https://www.figma.com/plugin-docs/intro/) using [TypeScript](https://www.typescriptlang.org/).
  
 <h2> How does it work</h2>
 
