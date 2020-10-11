@@ -42,25 +42,26 @@ figma.ui.onmessage = msg => {
     // Inflection Point
     // Force Deviation
     // Width Contraction
-    clearLines();
-    generateGrid(msg);
-    //rotateLines([getRandomPoint()]);
-  }
+    clearLines(msg.hasChanged);
+    if (lines.length == 0) {
+      generateGrid(msg);
+    } 
 
-  if (msg.type === 'rotate-lines') {
-    let randomTests = Math.floor(Math.random()*4);
-    //let randomTests = 1;
-    if (randomTests == 0) {
+    if (nRows == 3 && nColumns == 3) {
       rotateLines([getRandomPoint()]);
     }
-    else if (randomTests == 1) {
-      rotateLines([getRandomPoint(), getRandomPoint(), getRandomPoint(), getRandomPoint()]);
-    }
-    else if (randomTests > 1) {
-      rotateLines([getRandomPoint(), getRandomPoint()]);      
-    }
-    else if (randomTests == -1) {
-      rotateLines([[27, 7, 7*paddingSize, 27*paddingSize],[7, 20, 20*paddingSize, 7*paddingSize]]);
+    else {
+      let randomTests = Math.floor(Math.random()*7);
+      //let randomTests = 1;
+      if (randomTests <= 3) {
+        rotateLines([getRandomPoint()]);
+      }
+      else if (randomTests <= 5) {
+        rotateLines([getRandomPoint(), getRandomPoint()]);
+      }
+      else {
+        rotateLines([getRandomPoint(), getRandomPoint(), getRandomPoint()]);      
+      }
     }
   }
 
@@ -409,14 +410,26 @@ function rotate(theta) {
   ] as Transform;
 }
 
-function clearLines() {
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].removed) {
-      continue;
+function clearLines(reset) {
+  for (let i = lines.length - 1 ; i >= 0; i--) {
+    if (reset) {
+      if (lines[i].removed) {
+        continue;
+      }
+      else {
+        lines[i].remove();
+      }
     }
     else {
-      lines[i].remove();
+      if (lines[i].removed) {
+        lines.splice(i, 1);
+      }
+      else {
+        continue;
+      }
     }
   }
-  lines.splice(0, lines.length);
+  if (reset) {
+    lines.splice(0, lines.length);
+  }
 }

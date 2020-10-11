@@ -43,7 +43,7 @@
             <span class="errorText"></span>
           </div> 
         </div>
-        <input class="input" id="padding" min="0" max="999" value="3">
+        <input class="input" id="padding" min="0" max="999" value="30">
       </div>
       
       <div id="inputRow">
@@ -57,13 +57,17 @@
             <span class="errorText"></span>
           </div> 
         </div>
-      <input class="input" id="cell-size" min="1" max="1000" value="3">
+        <input class="input" id="cell-size" min="1" max="1000" value="30">
       </div>
     </section>
 
     <section id="VisualSettings">
       <h4>Visual Settings</h4>
-      <div id="inputRow"><div id="lineDetail"> <input class="input" id="ColorPicker" type="color" name="DefaultBlack" value="#000000" > <p>Color</p> </div>
+      <div id="inputRow">
+        <div id="lineDetail"> 
+          <input id="ColorPicker" type="color" name="DefaultBlack" value="#000000" > 
+          <p>Color</p> 
+        </div>
         <div id="colorinputwraper">
           <div class="error">
             <div class="errorWrapper"> 
@@ -71,7 +75,7 @@
               <span class="errorText"></span>
             </div> 
           </div>
-          <input class="input" id="ColorHexa" type="text" maxlength="7" minlenght="6" placeholder="#000000">
+          <input class="input" id="ColorHexa" type="text" maxlength="7" minlenght="6" value="#000000">
           <input class="input" id="ColorAlpha" type="number" min="0" max="100" value="100">
         </div>
       </div>
@@ -96,7 +100,7 @@
           <p>Rotation</p>
         </div>
         <label class="switch"> 
-          <input type="checkbox" id="PassiveRotation">
+          <input class="sliderInput" type="checkbox" id="PassiveRotation">
           <span class="slider round"></span>
         </label>
       </div>
@@ -107,7 +111,7 @@
           <p>Width Contraction</p>
         </div>
         <label class="switch">
-          <input type="checkbox" id="WidthReduction">
+          <input class="sliderInput" type="checkbox" id="WidthReduction">
           <span class="slider round"></span>
         </label>
       </div>
@@ -115,10 +119,10 @@
   </div>
 
   <section id="Footer">
-    <button id="ResetDefault" type="reset">Reset Default</button>
+    <button id="ResetDefault" type="button">Reset Default</button>
     <div id="buttonswrapper">
       <button class="btn-secondary" id="randomizer" type="button">Randomizer</button>
-      <button class="btn-primary" id="generate" type="button" disabled>Generate</button>
+      <button class="btn-primary" id="generate" type="button">Generate</button>
     </div>
   </section>
 </form>

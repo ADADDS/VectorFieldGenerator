@@ -12,10 +12,14 @@ const colorAlphaInput = document.getElementById('ColorAlpha') as HTMLInputElemen
 const widthReductionInput = document.getElementById('WidthReduction') as HTMLInputElement;
 const generateButton = document.getElementById('generate') as HTMLButtonElement;
 const randomizeButton = document.getElementById('randomizer') as HTMLButtonElement;
+const resetButton = document.getElementById("ResetDefault") as HTMLButtonElement;
+const formElement = document.getElementById("Main") as HTMLFormElement;
 
-let invalid_answers = Array(6).fill(1);
+let invalid_answers = Array(6).fill(0);
+let hasChanged = true;
 
 let inputs = document.getElementsByClassName("input");
+let sliders = document.getElementsByClassName("sliderInput");
 
 function validate(event) {
     let inputElement: HTMLInputElement = event.target;
@@ -24,6 +28,7 @@ function validate(event) {
     let value = inputElement.value;
     let validation: [boolean, string];
     let field_number: number = -1;
+
     switch(inputElement.id) {
         case "columns":
             field_number = 0;
@@ -55,15 +60,12 @@ function validate(event) {
             validation = hexadecimalValidate(value);
             //return;
             break;
-        case "ColorPicker":
-            colorHexInput.value = colorPickerInput.value;
-            return;
-            //break;
         default:
             return;
     }
     
     if (validation[0] == true) {
+        hasChanged = true;
         if (errorWrapper != undefined) {
             errorWrapper.style.display = "none"
         }
@@ -86,8 +88,13 @@ for (let i=0; i < inputs.length; i++) {
     inputs[i].addEventListener("change", validate, false);
 }
 
+for (let i=0; i < sliders.length; i++) {
+    sliders[i].addEventListener("change", () => {
+        hasChanged = true;
+    })
+}
+
 function enableDisableButton() {
-    console.log(invalid_answers);
     for (let i = 0; i < invalid_answers.length; i++) {
         if (invalid_answers[i] == 1) {
             generateButton.disabled = true;
@@ -101,22 +108,26 @@ function enableDisableButton() {
 function integerValidate(value: any, min: number, max: number): [boolean, string] {
     let validInput: boolean = false;
     let errorMessage: string = "";
-    let parsedValue = parseInt(value, 10);
+    let regExp = /^-?\d+$/;
     
-    if (isNaN(parsedValue)) {
+    if (!regExp.test(value)) {
         validInput = false;
-        errorMessage = "Value must be a number"
+        errorMessage = "Value must be an integer number"
     }
-    else if (parsedValue < min) {
-        validInput = false;
-        errorMessage = "Value must be greater than " + min.toString();
-    }
-    else if (parsedValue <= max) {
-        validInput = true;
-    }
-    else {
-        validInput = false;
-        errorMessage = "Value must be smaller than " + max.toString();
+    else 
+    {
+        let parsedValue = parseInt(value, 10);   
+        if (parsedValue < min) {
+            validInput = false;
+            errorMessage = "Value must be greater than " + min.toString();
+        }
+        else if (parsedValue <= max) {
+            validInput = true;
+        }
+        else {
+            validInput = false;
+            errorMessage = "Value must be smaller than " + max.toString();
+        }
     }
 
     return [validInput, errorMessage];
@@ -194,11 +205,43 @@ generateButton.addEventListener("click", () => {
     }
     let paint = paintCreator(colorHex, colorAlpha);
     let widthReduction = widthReductionInput.checked;
-    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, widthReduction} }, '*')
+    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, widthReduction, hasChanged} }, '*')
+    hasChanged = false;
+})
+
+resetButton.addEventListener("click", () => {
+    formElement.reset();
+    dispatchChangeEvents();
+    //hasChanged = true;
+    //enableDisableButton();
+})
+
+colorPickerInput.addEventListener("change", () => {
+    colorHexInput.value = colorPickerInput.value;
 })
 
 randomizeButton.addEventListener("click", () => {
-    parent.postMessage({ pluginMessage: { type: 'rotate-lines' } }, '*')
+    // Value is 3 to 10
+    let randomValue = (Math.floor(Math.random()*8)+3).toString(10);
+    rowInput.value = randomValue;
+    columnInput.value = randomValue;
+    // Value is 60
+    cellSizeInput.value = Number(60).toString();
+    // Value is 20, 30, 40, 50 or 60
+    randomValue = ((Math.floor(Math.random()*5)*10)+20).toString(10);
+    paddingInput.value = randomValue;
+    // Value is #000000 to #FFFFFF
+    randomValue = (Math.floor(Math.random()*16777215)).toString(16);
+    randomValue = "#" + completeHexa(randomValue);
+    colorHexInput.value = randomValue;
+    colorPickerInput.value = randomValue;
+    // Value is 1 to 3
+    randomValue = (Math.floor(Math.random()*4)+1).toString(10);
+    strokeWeightInput.value = randomValue;
+    // Reset interface to all-valid state
+    hasChanged = true;
+    dispatchChangeEvents();
+    //enableDisableButton();
 })
 
 document.addEventListener('keydown', (e) => {
@@ -206,59 +249,6 @@ document.addEventListener('keydown', (e) => {
         parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
     }
 })
-
-/*
-colorPickerInput.addEventListener("change", (evt) => {
-    colorHexInput.value = colorPickerInput.value;
-})
-
-colorHexInput.addEventListener("change", (evt) => {
-    let inputValue = colorHexInput.value;
-    let finalHex: string;
-
-    // Check string after '#'
-    if (inputValue[0] == '#' && inputValue.length > 1) {
-        finalHex = inputValue.slice(1);
-    }
-    else {
-        finalHex = inputValue;
-    }
-
-    let regexp = /^[0-9A-Fa-f]+$/
-    // If it's a hexdecimal valid number
-    if (regexp.test(finalHex)) {
-        // Incomplete color number
-        if (finalHex.length < 6) {
-            finalHex = completeHexa(finalHex);
-        } 
-        // Invalid number, cut it to fit 6 digits
-        else if (finalHex.length > 6) {
-            finalHex = finalHex.slice(0, 6);
-        }
-        // if Length==6, it's a valid hexadecimal color number
-        finalHex = '#' + finalHex
-        colorPickerInput.value = finalHex;
-        colorHexInput.value = finalHex;
-    }
-    // Invalid hexadecimal number
-    else {
-        // MAKE ERROR
-        colorPickerInput.value = "#FFFFFF";
-        console.log("ERRO");
-    }
-})
-
-*/
-
-/*
-document.getElementById('ColorPicker').onchange = (evt) => {
-    (<HTMLInputElement>document.getElementById('ColorHexa')).value = (<HTMLInputElement>evt.target).value
-}
-
-document.getElementById('ColorHexa').onchange = (evt) => {
-    (<HTMLInputElement>document.getElementById('ColorPicker')).value = (<HTMLInputElement>evt.target).value
-}
-*/
 
 function isValidHexa(string) {
     let possibleHexa
@@ -300,7 +290,12 @@ function paintCreator(hex, alpha) {
     return [{opacity: a, color: { r: red, g: grn, b: blu }, type: 'SOLID' }];
 }
 
-
+function dispatchChangeEvents() {
+    var chgEvent = new Event("change");
+    for (let i = 0; i < inputs.length; i++) {
+        inputs[i].dispatchEvent(chgEvent);
+    }
+}
 
 function completeHexa(initialInput: string){
     let finalInput: string; 
@@ -310,6 +305,9 @@ function completeHexa(initialInput: string){
     }
     else if (initialInput.length < 6) {
         finalInput = initialInput + initialInput[(initialInput.length) - 1].repeat(6 - initialInput.length); 
+    }
+    else if(initialInput.length == 6) {
+        finalInput = initialInput;
     }
 
     return finalInput;  
