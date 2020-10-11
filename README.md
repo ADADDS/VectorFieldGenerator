@@ -1,10 +1,14 @@
 <h1> Vector Field Generator</h1>
+Is a customizable vector field generator created with [Figma Plugin API] (https://www.figma.com/plugin-docs/intro/).
  
 <h2> How does it work</h2>
 
+
 <h2>How to colaborate</h2>
 
+
 <h2>Limitations</h2>
+
 
 <h2>Known issues</h2>
 
