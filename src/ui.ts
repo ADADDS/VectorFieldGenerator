@@ -19,7 +19,8 @@ let inputs = document.getElementsByClassName("input");
 
 function validate(event) {
     let inputElement: HTMLInputElement = event.target;
-    let error: HTMLElement = event.target.parentNode.getElementsByClassName("errorText")[0];
+    let errorText = inputElement.parentElement.getElementsByClassName("errorText")[0];
+    let errorWrapper = errorText.parentElement;
     let value = inputElement.value;
     let validation: [boolean, string];
     let field_number: number = -1;
@@ -63,17 +64,17 @@ function validate(event) {
     }
     
     if (validation[0] == true) {
-        if (error != undefined) {
-            error.style.display = "none"
+        if (errorWrapper != undefined) {
+            errorWrapper.style.display = "none"
         }
         inputElement.setCustomValidity("");
         invalid_answers[field_number] = 0;
         enableDisableButton();
     }
     else {
-        if (error != undefined) {
-            error.style.display = "inline-block"
-            error.innerHTML = validation[1];
+        if (errorWrapper != undefined) {
+            errorWrapper.style.display = "inline-block"
+            errorText.innerHTML = validation[1];
         }
         inputElement.setCustomValidity(validation[1]);
         invalid_answers[field_number] = 1;

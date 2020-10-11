@@ -34,7 +34,7 @@ h4{
 /****** TOOLTIP ********/
 .errorWrapper {
     position: relative;
-    display: inline-block; /* colocar hide dps */
+    display: none; /* colocar hide dps */
     border-bottom: 1px dotted black;
 }
 
