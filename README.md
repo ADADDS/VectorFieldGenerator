@@ -1,14 +1,33 @@
 <h1> Vector Field Generator</h1>
 Is a customizable vector field generator created with <a href="https://www.figma.com/plugin-docs/intro/">Figma Plugin API</a> using <a href="https://www.typescriptlang.org/">TypeScript</a>.
  
-<h2> How does it work</h2>
+<h2> How it works</h2>
+<ol>
+<li>Install the Figma Plugin.</li>
+<li>In Figma, open a new or existing document, then either hit cmd+/ and search "Vector Field Generator" and hit enter or find the plugin on the Plugin tab.</li>
+<li>Start messing around with the field's properties and once you are done, click  ```Generate```.</li>
+</ol>
 
+[app picture]
+
+<ul> 
+<li><b>Generate</b> creates the vector field with the specified data.</li>
+<li><b>Randomizer</b> will randomly create new values for the number of rows and columns, padding, cell-size and color.</li>
+<li><b>Reset default</b> makes all the values go back to their initial state.</li>
+</ul>
 
 <h2>How to colaborate</h2>
 
+<h3>Feedback</h3>
+You can provide feedback and report bugs on this <a hre="#">Google Forms</a>.
+<h3></h3>
 
 <h2>Limitations</h2>
-
+These are the known limititations to the version V1.
+<ul> 
+<li>It's not currently possible to choose how many inflection points there will be on the matrix.</li>
+<li>It's not currently possible to choose the inflection point's.</li>
+</ul>
 
 <h2>Known issues</h2>
 
