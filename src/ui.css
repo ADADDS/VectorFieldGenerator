@@ -130,6 +130,18 @@ h4{
     color: #333333 ;
 }
 
+.btn-secondary:focus {
+    border-color:#191F23;
+    border-width: 1px;
+    outline: none;
+  }
+  
+  .btn-primary:focus {
+    border-color:#191F23;
+    border-width: 1px;
+    outline: none;
+  }
+
 /********* INPUTS ********/ 
 
 input:focus {
