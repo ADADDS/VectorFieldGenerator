@@ -4,14 +4,18 @@ Is a customizable vector field generator created with <a href="https://www.figma
 
 <h2> Instalation</h2>
 <a href="#">Install on Figma</a>
-
-<h2> How it works</h2>
 <ol>
  <li>Install the Figma Plugin.</li>
  <li>In Figma, open a new or existing document, then either hit cmd+/ and search "Vector Field Generator" and hit enter or find the plugin on the Plugin tab.</li>
  <li>Start messing around with the field's properties and once you are done, click  `Generate`.</li>
 </ol>
 
+<h2> How it works</h2>
+This plugin provides two core function:
+<ol>
+ <li><b>Generate vector fields:</b>trhought trigonometry a nxn matrix is generated with lines that simulate the behaviour of mathematical vector fields.</li>
+ <li><b>Smart populate:</b> you can randomize values for the number of rows, columns, padding, cell-size and color.</li>
+</ol>
 
 ![Application Interface](https://user-images.githubusercontent.com/20411105/95700967-ae6f1600-0c1e-11eb-9abc-88267e8ec4b9.png)
 
@@ -20,6 +24,7 @@ Is a customizable vector field generator created with <a href="https://www.figma
 <li><b>Randomizer</b> will randomly create new values for the number of rows and columns, padding, cell-size and color.</li>
 <li><b>Reset default</b> makes all the values go back to their initial state.</li>
 </ul>
+<b>Note:</b> the randomizer function will only create square matrix - which means the number of columns equals the number of rows.
 
 <h2>How to colaborate</h2>
 You can colaborate by reporting bugs, sending feedback and feature requests. Here is how to do each one of them.
