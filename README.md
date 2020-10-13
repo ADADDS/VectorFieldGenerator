@@ -1,6 +1,6 @@
 ![Readme Cover](https://user-images.githubusercontent.com/20411105/95701000-c5ae0380-0c1e-11eb-9c9c-aff9138f849c.png)
 # Vector Field Generator
-Is a customizable vector field generator created with [Figma Plugin API](https://www.figma.com/plugin-docs/intro/) using [TypeScript](https://www.typescriptlang.org/). This plugins creates vector fields by allowing users to customize a small set of parameters that are used to generate a group of lines with the main porpourse of simulating vector fields.
+Is a customizable vector field generator created with [Figma Plugin API](https://www.figma.com/plugin-docs/intro/) using [TypeScript](https://www.typescriptlang.org/). This plugins creates vector fields by allowing users to customize a small set of parameters that are used to generate a group of lines with the main purpose of simulating vector fields.
 
 ## Instalation 
 [Install on Figma](#)
@@ -10,7 +10,7 @@ Is a customizable vector field generator created with [Figma Plugin API](https:/
 3. Start messing around with the field's properties and once you are done, click  `Generate`.
 
 ## How it works
-This plugin provides two core function:
+This plugin provides two core functionalities:
 
 1. **Generate vector fields:** through trigonometry a nxn matrix is generated with lines that simulate the behaviour of mathematical vector fields.
 2. **Smart populate:** you can randomize values for the number of rows, columns, padding, cell-size and color.
@@ -19,17 +19,17 @@ This plugin provides two core function:
 ![Application Interface](https://user-images.githubusercontent.com/20411105/95700967-ae6f1600-0c1e-11eb-9abc-88267e8ec4b9.png)
 
  
-* **Generate** creates the vector field with the specified data.
+* **Generate** creates the vector field using the values specified by the user.
 * **Randomizer** will randomly create new values for the number of rows and columns, padding, cell-size and color.
 * **Reset default** makes all the values go back to their initial state.
 
-**Note:** the randomizer function will only create square matrix - which means the number of columns equals the number of rows.
+**Note:** the randomizer function will only create square matrices - which means the number of columns equals the number of rows.
 
 ## How to colaborate
 You can colaborate by reporting bugs, sending feedback and feature requests. Here is how to do each one of them.
-### Contributing
-Pull requests are welcome. For major changes, please open an issue to discuss what you would like to change.
 
+### Feedback
+You can provide feedback and report bugs on this [Google Forms](#).
 
 ### Development
 To setup the environment and start coding, do the following steps:
@@ -58,8 +58,8 @@ After these 6 steps, you can now test the plugin inside any of your Figma docume
 
 When adding new features and solving bug issues, you can compile the plugin by running again the line shown in step 4. 
 
-### Feedback
-You can provide feedback and report bugs on this [Google Forms](#).
+### Contributing
+Pull requests are welcome. For major changes, please open an issue to discuss what you would like to change.
 
 ## Limitations
 These are the known limititations to the version V1.
