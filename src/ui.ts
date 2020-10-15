@@ -21,6 +21,7 @@ let hasChanged = true;
 let inputs = document.getElementsByClassName("input");
 let sliders = document.getElementsByClassName("sliderInput");
 
+// Check if Input Field value is valid
 function validate(event) {
     let inputElement: HTMLInputElement = event.target;
     let errorText = inputElement.parentElement.getElementsByClassName("errorText")[0];
@@ -84,16 +85,19 @@ function validate(event) {
     }
 }
 
+// Attach validate function to any input field when change event occurs
 for (let i=0; i < inputs.length; i++) {
     inputs[i].addEventListener("change", validate, false);
 }
 
+// Keep track of sliders changes too
 for (let i=0; i < sliders.length; i++) {
     sliders[i].addEventListener("change", () => {
         hasChanged = true;
     })
 }
 
+// Check if any of the inputs are invalid, disabling the generate button when at least one entry is invalid
 function enableDisableButton() {
     for (let i = 0; i < invalid_answers.length; i++) {
         if (invalid_answers[i] == 1) {
@@ -105,6 +109,7 @@ function enableDisableButton() {
     return true;
 }
 
+// Check if string is a valid integer entry, choosing the right error message when necessary
 function integerValidate(value: any, min: number, max: number): [boolean, string] {
     let validInput: boolean = false;
     let errorMessage: string = "";
@@ -133,6 +138,7 @@ function integerValidate(value: any, min: number, max: number): [boolean, string
     return [validInput, errorMessage];
 }
 
+// Check if string is a valid hexadecimal entry, choosing the right error message when necessary
 function hexadecimalValidate(value: any): [boolean, string] {
     let inputValue = value;
     let finalHex: string;
@@ -164,43 +170,21 @@ function hexadecimalValidate(value: any): [boolean, string] {
     }
     // Invalid hexadecimal number
     else {
-        // MAKE ERROR
         colorPickerInput.value = "#FFFFFF";
         return [false, "Color must be a valid hexadecimal number"];
     }
 }
 
+// Send the input values to plugin code via message
 generateButton.addEventListener("click", () => {
     let rows = parseInt(rowInput.value, 10);
-    if (isNaN(rows)) {
-        rows = parseInt(rowInput.placeholder, 10);
-    }
     let columns = parseInt(columnInput.value, 10);
-    if (isNaN(columns)) {
-        columns = parseInt(columnInput.placeholder, 10);
-    }
     let padding = parseInt(paddingInput.value, 10);
-    if (isNaN(padding)) {
-        padding = parseInt(paddingInput.placeholder, 10);
-    }
     let cellSize = parseInt(cellSizeInput.value, 10);
-    if (isNaN(cellSize)) {
-        cellSize = parseInt(cellSizeInput.placeholder, 10);
-    }
     let strokeWeight = parseInt(strokeWeightInput.value, 10);
-    if (isNaN(strokeWeight)) {
-        strokeWeight = parseInt(strokeWeightInput.placeholder, 10);
-    }
     let colorAlpha = parseInt(colorAlphaInput.value, 10);
-    if (isNaN(colorAlpha)) {
-        colorAlpha = parseInt(colorAlphaInput.placeholder, 10);
-    }
     let colorHex = colorHexInput.value;
-    if (!isValidHexa(colorHex)) {
-        colorHex = colorHexInput.placeholder;
-    }
-    else {
-        if (colorHex.length == 6)
+    if (colorHex.length == 6) {
         colorHex = "#" + colorHex
     }
     let paint = paintCreator(colorHex, colorAlpha);
@@ -209,17 +193,18 @@ generateButton.addEventListener("click", () => {
     hasChanged = false;
 })
 
+// Reset the input fields to its default values and re-validate to remove warnings
 resetButton.addEventListener("click", () => {
     formElement.reset();
     dispatchChangeEvents();
-    //hasChanged = true;
-    //enableDisableButton();
 })
 
+// Synchronize ColorPicker and ColorHexa fields
 colorPickerInput.addEventListener("change", () => {
     colorHexInput.value = colorPickerInput.value;
 })
 
+// Fill the input fields with random values and re-validate to remove warnings
 randomizeButton.addEventListener("click", () => {
     // Value is 3 to 10
     let randomValue = (Math.floor(Math.random()*8)+3).toString(10);
@@ -241,41 +226,16 @@ randomizeButton.addEventListener("click", () => {
     // Reset interface to all-valid state
     hasChanged = true;
     dispatchChangeEvents();
-    //enableDisableButton();
 })
 
+// Close plugin when escape key is pressed
 document.addEventListener('keydown', (e) => {
     if (e.key == "Esc" || e.key == "Escape") {
         parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
     }
 })
 
-function isValidHexa(string) {
-    let possibleHexa
-    if (string.length == 7) {
-        if (string[0] == '#') {
-            possibleHexa = string.slice(1)
-        }
-        else {
-            return false
-        }
-    }
-    else if (string.length == 6) {
-        possibleHexa = string
-    }
-    else {
-        return false
-    }
-
-    let regexp = /[0-9A-Fa-f]{6}/
-    if (regexp.test(possibleHexa)) {
-        return true
-    }
-    else {
-        return false
-    }
-}
-
+// Receive and Hexadecimal and an Alpha and return a Paint object compatible to Figma's paint type
 function paintCreator(hex, alpha) {
     let red:any = 0, grn:any = 0, blu:any = 0, a:number = 0;
     red = "0x" + hex[1] + hex[2];
@@ -290,6 +250,7 @@ function paintCreator(hex, alpha) {
     return [{opacity: a, color: { r: red, g: grn, b: blu }, type: 'SOLID' }];
 }
 
+// Dispatch change events to trigger input fields' validation function
 function dispatchChangeEvents() {
     var chgEvent = new Event("change");
     for (let i = 0; i < inputs.length; i++) {
@@ -297,6 +258,7 @@ function dispatchChangeEvents() {
     }
 }
 
+// Given an initial hexadecimal string, complete it to be 6 characters long
 function completeHexa(initialInput: string){
     let finalInput: string; 
 
@@ -312,5 +274,3 @@ function completeHexa(initialInput: string){
 
     return finalInput;  
 }  
-
-//    let initialInput: string = colorHexInput.value;
