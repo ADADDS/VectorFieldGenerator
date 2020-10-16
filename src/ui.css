@@ -22,6 +22,7 @@ h4{
     text-align: left;
     font-weight: 400;
     margin-top: 8px;
+    margin-bottom: 16px;
 }
 
 #mainContent{
@@ -185,6 +186,7 @@ input:invalid{
 }
 #colorPicker{
     margin-left: -1px;
+    margin-right: -5px;
     height: 24px;
     width: 30px;
     cursor: pointer;
