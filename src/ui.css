@@ -6,6 +6,10 @@ body{
     flex-direction: column;
 }
 
+#Main{
+    margin-bottom: 0px;
+}
+
 #VisualSettings{
     margin-left: 40px;
 }
@@ -17,10 +21,10 @@ p {
 }
 
 h4{
-    font-size: 16px;
+    font-size: 12px;
     color: #333333;
     text-align: left;
-    font-weight: 400;
+    font-weight: 800;
     margin-top: 8px;
     margin-bottom: 16px;
 }
@@ -29,7 +33,7 @@ h4{
     display: flex;
     flex-direction: row;
     margin-left: 40px;
-    margin-top: 16px;
+    margin-top: 20px;
     margin-bottom: 0px;
 }
 
@@ -54,7 +58,7 @@ h4{
     left: 50%;
     margin-left: -72px;
     opacity: 0;
-    transition: opacity 0.35s;
+    transition: opacity 0.3s;
 }
 
 .errorContent .errorText::after {
@@ -83,7 +87,6 @@ h4{
     align-items: center;
     padding-left: 40px;
     padding-right: 40px;
-    margin-bottom: -16px;
 }
 
 #buttonswrapper{
@@ -186,7 +189,7 @@ input:invalid{
 }
 #colorPicker{
     margin-left: -1px;
-    margin-right: -5px;
+    margin-right: -4px;
     height: 24px;
     width: 30px;
     cursor: pointer;
@@ -290,6 +293,7 @@ input:checked + .slider:before {
     color: #333333;
     font-weight: 400;
     cursor: pointer;
+    padding-left: 0px;
 }
 
 #ResetDefault:hover{
@@ -310,7 +314,7 @@ input:checked + .slider:before {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 #lineDetail{

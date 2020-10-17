@@ -1,16 +1,16 @@
 ![Readme Cover](https://user-images.githubusercontent.com/20411105/95701000-c5ae0380-0c1e-11eb-9c9c-aff9138f849c.png)
 # Vector Field Generator
-Is a customizable vector field generator created with [Figma Plugin API](https://www.figma.com/plugin-docs/intro/) using [TypeScript](https://www.typescriptlang.org/). This plugins creates vector fields by allowing users to customize a small set of parameters that are used to generate a group of lines with the main purpose of visually simulate a [vector field](https://en.wikipedia.org/wiki/Vector_field).
+Is a customizable vector field generator created with [Figma Plugin API](https://www.figma.com/plugin-docs/intro/) using [TypeScript](https://www.typescriptlang.org/). This plugins creates vector fields by allowing users to customize a small set of parameters that are used to generate a group of lines to visually simulate a [vector field](https://en.wikipedia.org/wiki/Vector_field).
 
 ## Instalation 
 1. [Install on Figma](#)
-2. Open a new or existing document, then either hit ```cmd+/``` and search "Vector Field Generator" and hit enter or find the plugin on the Plugin Tab.
-3. Start messing around with the field's properties and once you are done, click  ```Generate```.
+2. Open a new or existing document, then either hit ```cmd+/``` or ```ctrl+;```, search "Vector Field Generator" and hit enter. Or search for the the plugin on the Plugin Tab.
+3. Start messing around and once you are done, click  ```Generate``` to create your very first vector field.
 
 ## How it works
 This plugin provides two core functionalities:
 
-1. **Generate vector fields:** through trigonometry a nxn matrix is generated with lines that simulate the behaviour of mathematical vector fields.
+1. **Generate vector fields:** through trigonometry a n columns x n rows matrix is generated using small lines that simulate the behavior of mathematical vector fields.
 2. **Smart populate:** you can randomize values for the number of rows, columns, padding, cell-size and color.
 
 
