@@ -6,12 +6,16 @@ body{
     flex-direction: column;
 }
 
+#matrixStructure{
+    width: 180px;
+}
+
 #Main{
     margin-bottom: 0px;
 }
 
 #VisualSettings{
-    margin-left: 40px;
+    margin-left: 50px;
 }
 
 p {
@@ -38,6 +42,7 @@ h4{
 }
 
 /****** TOOLTIP ********/
+
 .errorContent {
     position: relative;
     display: none;
@@ -80,13 +85,20 @@ h4{
 /******* FOOOTER *******/
 
 #Footer{
-    margin-top: 16px;
+    margin-top: 14px;
+    border-top: 1px;
+    border-right: 0px;
+    border-left: 0px;
+    border-bottom: 0px;
+    border-color: #eeeeee;
+    border-style: solid;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding-left: 40px;
-    padding-right: 40px;
+    padding-right: 37px;
+    padding-top: 20px;
 }
 
 #buttonswrapper{
@@ -95,17 +107,17 @@ h4{
     justify-content: flex-end;
 }
 
+/********* BUTTONS ********/ 
+
 .btn-primary {
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
     border-radius: 8px;
     background: #191F23;
     color:#fff ;
     border: none;
     padding: 12px 16px 12px 16px;
 }
-
-/********* BUTTONS ********/ 
 
 .btn-primary:hover {
     background: #4B4B4B;
@@ -123,14 +135,16 @@ h4{
     cursor: pointer;
     border-radius: 8px;
     color: #333333;
-    border: none;
-    padding: 12px 16px 12px 16px;
+    font-size: 12px;
+    border-color:#191F23;
+    border-width: 1px;
+    padding: 12px 12px 12px 12px;
     margin-right: 12px;
     outline: none;
 }
 
 .btn-secondary:hover {
-    background: #fafafa;
+    background: #F3F3F3;
     color: #333333 ;
 }
 
@@ -149,8 +163,6 @@ h4{
 /********* INPUTS ********/ 
 
 input:focus {
-    border-color:#191F23;
-    border-width: 1px;
     outline: none;
   }
 
@@ -290,7 +302,8 @@ input:checked + .slider:before {
     border: none;
     outline: none;
     margin: 0px;
-    color: #333333;
+    color: #ccc;
+    font-size: 10px;
     font-weight: 400;
     cursor: pointer;
     padding-left: 0px;
@@ -309,8 +322,11 @@ input:checked + .slider:before {
     align-items: center;
 }
 
+#VisualSettings #inputRow{
+    width:200px
+}
+
 #inputRow{
-    width: 200;
     display: flex;
     justify-content: space-between;
     align-items: center;

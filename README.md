@@ -4,7 +4,7 @@ Is a customizable vector field generator created with [Figma Plugin API](https:/
 
 ## Instalation 
 1. [Install on Figma](#)
-2. Open a new or existing document, then either hit ```cmd+/``` or ```ctrl+;```, search "Vector Field Generator" and hit enter. Or search for the the plugin on the Plugin Tab.
+2. Open a new or existing document, then either hit ```cmd+/``` or ```ctrl+;```, search "Vector Field Generator" and hit enter. Or search for the the plugin on Community tab.
 3. Start messing around and once you are done, click  ```Generate``` to create your very first vector field.
 
 ## How it works
@@ -51,19 +51,18 @@ After these 6 steps, you can now test the plugin inside any of your Figma docume
 When adding new features and solving bug issues, you can compile the plugin by running again the line shown in step 4. 
 
 ### Contributing
-Pull requests are welcome. For major changes, please open an issue to discuss what you would like to change. Feel free to provide feedback and report bugs or unexpected behaviors.
+Pull requests are welcome. For major changes, please open an issue to discuss what you would like to change. Feel free to provide feedback and report bugs or unexpected behaviors. 
 
 ## Limitations
-These are the known limititations to the version V1.
+These are the known limititations to the version V1. 
 
 * It's not currently possible to choose how many inflection points there will be on the matrix.
 * It's not currently possible to choose the inflection point's.
 * It's not currently possible to control the width reduction parameters.
 * It's not currently possible to control the rotation parameters.
 * Due to performance issues, we are litiming the number of columns and rows to 50. 
+* Keyboard navigation is not working properly.
 
-## Known issues
-At this moment there are no known issues.
-
+<br>
 
 Made with :heart: by [@tuiuiu](https://github.com/Tuiuiu) and [@lucianoinfanti](https://github.com/LucianoInfanti)
