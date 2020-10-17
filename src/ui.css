@@ -6,12 +6,12 @@ body{
     flex-direction: column;
 }
 
-#matrixStructure{
-    width: 180px;
-}
-
 #Main{
     margin-bottom: 0px;
+}
+
+#matrixStructure{
+    width: 180px;
 }
 
 #VisualSettings{
@@ -21,12 +21,30 @@ body{
 p {
     padding-left: 8px;
     font-size: 11x;
-    color: #333333;
+    color: #191F23;
 }
 
-h4{
+#VisualSettings #inputRow{
+    width:200px
+}
+
+#inputRow{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#lineDetail{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 32px;
+}
+
+h4 {
     font-size: 12px;
-    color: #333333;
+    color: #191F23;
     text-align: left;
     font-weight: 800;
     margin-top: 8px;
@@ -41,7 +59,143 @@ h4{
     margin-bottom: 0px;
 }
 
-/****** TOOLTIP ********/
+/* Inputs */ 
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input{
+    height: 32px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 50px;
+    padding-right: 6px;
+    text-align: right;
+}
+
+input:focus {
+    outline: none;
+}
+
+input:hover {
+    border-color: #868686;
+    border-width: 1px;
+    outline: none;
+}
+
+input:invalid{
+    border-color: #DD0830;
+    border-width: 1px;
+    outline: none;
+    margin-left:8px;
+}
+
+ #colorHexa{
+    width: 70px;
+    padding-right:10px;
+}
+
+#colorPicker{
+    margin-left: -1px;
+    margin-right: -4px;
+    height: 24px;
+    width: 30px;
+    cursor: pointer;
+    border: none;
+}
+
+#colorPicker::-webkit-color-swatch-wrapper {
+    padding: 0px;
+    margin: 0px;
+}
+
+#colorPicker::-webkit-color-swatch {
+    border: 1px;
+    border-style: solid;
+    border-color:#ccc;
+    height: 20px;
+    width: 20px;
+    border-radius: 6px;
+}
+
+#colorinputwraper{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#ColorAlpha{
+    margin-left: 8px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .3s;
+    transition: .3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 6px;
+    bottom: 5px;
+    background-color: white;
+    -webkit-transition: .3s;
+    transition: .3s;
+}
+
+input:checked + .slider {
+    background-color: #191F23;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(23x);
+    -ms-transform: translateX(23px);
+    transform: translateX(23px);
+}
+
+.slider.round {
+    border-radius: 99px;
+}
+
+.slider.round:before {
+    border-radius: 99px;
+} 
+
+#toggleDiv{
+    display: inline-block;
+}
+
+/* Error status on inputs */
+
+#errorWrapper{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
 
 .errorContent {
     position: relative;
@@ -82,7 +236,7 @@ h4{
     opacity: 1;
 }
   
-/******* FOOOTER *******/
+/* Footer section */ 
 
 #Footer{
     margin-top: 14px;
@@ -107,7 +261,7 @@ h4{
     justify-content: flex-end;
 }
 
-/********* BUTTONS ********/ 
+/* Buttons */
 
 .btn-primary {
     cursor: pointer;
@@ -152,150 +306,13 @@ h4{
     border-color:#191F23;
     border-width: 1px;
     outline: none;
-  }
+}
   
-  .btn-primary:focus {
+.btn-primary:focus {
     border-color:#191F23;
     border-width: 1px;
     outline: none;
-  }
-
-/********* INPUTS ********/ 
-
-input:focus {
-    outline: none;
-  }
-
-  input:hover {
-    border-color: #868686;
-    border-width: 1px;
-    outline: none;
-  }
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
 }
-
-input{
-    height: 32px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    width: 50px;
-    padding-right: 6px;
-    text-align: right;
-}
-
-/****** INPUT ERROR ******/
-input:invalid{
-    border-color: #DD0830;
-    border-width: 1px;
-    outline: none;
-    margin-left:8px;
-}
-
-/******** INPUT COLOR *****/
-#colorHexa{
-    width: 70px;
-    padding-right:10px;
-}
-#colorPicker{
-    margin-left: -1px;
-    margin-right: -4px;
-    height: 24px;
-    width: 30px;
-    cursor: pointer;
-    border: none;
-}
-
-#colorPicker::-webkit-color-swatch-wrapper {
-    padding: 0px;
-    margin: 0px;
-}
-
-#colorPicker::-webkit-color-swatch {
-    border: 1px;
-    border-style: solid;
-    border-color:#ccc;
-    height: 20px;
-    width: 20px;
-    border-radius: 6px;
-}
-
-#colorinputwraper{
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-#ColorAlpha{
-    margin-left: 8px;
-}
-
-/********* TOGGLE ********/ 
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-/* The slider */
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .3s;
-    transition: .3s;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 14px;
-    width: 14px;
-    left: 6px;
-    bottom: 5px;
-    background-color: white;
-    -webkit-transition: .3s;
-    transition: .3s;
-}
-
-input:checked + .slider {
-    background-color: #191F23;
-}
-
-input:checked + .slider:before {
-    -webkit-transform: translateX(23x);
-    -ms-transform: translateX(23px);
-    transform: translateX(23px);
-}
-
-/* Rounded sliders */
-.slider.round {
-    border-radius: 99px;
-}
-
-.slider.round:before {
-    border-radius: 99px;
-} 
-
-#toggleDiv{
-    display: inline-block;
-}
-
-/********* RESET ********/ 
 
 #ResetDefault{
     background-color: #fff;
@@ -311,31 +328,4 @@ input:checked + .slider:before {
 
 #ResetDefault:hover{
     text-decoration: underline;
-}
-
-
-/********* CONTENT ROWS ********/ 
-
-#errorWrapper{
-    display: flex;
-    justify-content: end;
-    align-items: center;
-}
-
-#VisualSettings #inputRow{
-    width:200px
-}
-
-#inputRow{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-#lineDetail{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    height: 32px;
 }
