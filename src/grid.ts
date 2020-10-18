@@ -52,6 +52,7 @@ function generateGrid() {
     // Create the line in the center of its padding, append it to the document and push it to the array
     for (let i = 0; i < nRows; i++) {
         for (let j = 0; j < nColumns; j++){
+            /*
             const newLine = figma.createLine();
             let centerPaddingOffset = (paddingSize - baseWidth)/2;
             newLine.resize(baseWidth, 0);
@@ -59,6 +60,29 @@ function generateGrid() {
             newLine.y = i*paddingSize + paddingSize/2 + startingPoint.y;
             newLine.strokes = paint;
             newLine.strokeWeight = strokeWeight;
+            newLine.strokeAlign = "OUTSIDE";
+            newLine.strokeCap = "ARROW_EQUILATERAL";
+            // Add line to document and to array
+            figma.currentPage.appendChild(newLine);
+            lines.push(newLine);
+            */
+            
+            const newLine = figma.createVector();
+            let centerPaddingOffset = (paddingSize - baseWidth)/2;
+            newLine.vectorPaths = [{
+                windingRule: "EVENODD",
+                data: "M 0 0 L 100 0 Z"
+            }];
+            newLine.resize(baseWidth, 0);
+            newLine.x = j*paddingSize + centerPaddingOffset + startingPoint.x;
+            newLine.y = i*paddingSize + paddingSize/2 + startingPoint.y;
+            newLine.strokes = paint;
+            newLine.strokeWeight = strokeWeight;
+            //newLine.strokeAlign = "OUTSIDE";
+            /* make a copy of the original node */
+            let copy = JSON.parse(JSON.stringify(newLine.vectorNetwork));
+            copy.vertices[1].strokeCap = "SQUARE";
+            newLine.vectorNetwork = copy;
             // Add line to document and to array
             figma.currentPage.appendChild(newLine);
             lines.push(newLine);

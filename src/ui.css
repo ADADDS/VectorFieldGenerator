@@ -104,6 +104,7 @@ input:invalid{
     width: 30px;
     cursor: pointer;
     border: none;
+    background: none;
 }
 
 #colorPicker::-webkit-color-swatch-wrapper {
