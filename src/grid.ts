@@ -5,12 +5,13 @@ let nColumns: number;
 let paddingSize: number;
 let baseWidth: number;
 let distanceResize = false;
+let passiveRotation = false;
 let strokeWeight: number;
 let startingPoint = { 
   x: 0, y: 0 
 };
 let paint: any;
-const lines: SceneNode[] = [];
+const lines: VectorNode[] = [];
 
 // Handle the generate-button action
 export function handleGenerate(msg) {
@@ -22,6 +23,7 @@ export function handleGenerate(msg) {
         baseWidth = msg.cellSize;
         strokeWeight = msg.strokeWeight;
         distanceResize = msg.widthReduction;
+        passiveRotation = msg.passiveRotation;
         paint = msg.paint;
         generateGrid();
     } 
@@ -74,15 +76,20 @@ function generateGrid() {
                 data: "M 0 0 L 100 0 Z"
             }];
             newLine.resize(baseWidth, 0);
+            /*
             newLine.x = j*paddingSize + centerPaddingOffset + startingPoint.x;
             newLine.y = i*paddingSize + paddingSize/2 + startingPoint.y;
+            */
+            newLine.x = j*paddingSize + startingPoint.x;
+            newLine.y = i*paddingSize + startingPoint.y;
+
             newLine.strokes = paint;
             newLine.strokeWeight = strokeWeight;
-            //newLine.strokeAlign = "OUTSIDE";
             /* make a copy of the original node */
-            let copy = JSON.parse(JSON.stringify(newLine.vectorNetwork));
-            copy.vertices[1].strokeCap = "SQUARE";
-            newLine.vectorNetwork = copy;
+            let vecNetwork = JSON.parse(JSON.stringify(newLine.vectorNetwork));
+            // Add 
+            vecNetwork.vertices[1].strokeCap = "ARROW_LINES";
+            newLine.vectorNetwork = vecNetwork;
             // Add line to document and to array
             figma.currentPage.appendChild(newLine);
             lines.push(newLine);
@@ -126,15 +133,21 @@ function rotateLines(targetPoints) {
                 if (inflectionPoints[0] == -1) {
                     lines[i].resize(0.01, 0);
                     lines[i].x = lines[i].x + baseWidth/2;
+                    let vecNetwork = JSON.parse(JSON.stringify(lines[i].vectorNetwork));
+                    vecNetwork.vertices[1].strokeCap = "NONE";
+                    lines[i].vectorNetwork = vecNetwork;
                 }
                 // Deal with the other lines
                 else {
                     let ocSum = 0;
                     let acSum = 0;
+                    let smallestDistance = selectClosestPoint(i, targetPoints);
+                    let vecNetwork = JSON.parse(JSON.stringify(lines[i].vectorNetwork));
+                    vecNetwork.vertices[1].strokeCap = "ARROW_LINES";
+                    lines[i].vectorNetwork = vecNetwork;
 
                     if (distanceResize == true) {
                         // Resize based on the distance
-                        let smallestDistance = selectClosestPoint(i, targetPoints);
                         let reducingFactor = smallestDistance[0] / paddingSize;
                         let widthResize;
                         //let elements = nRows * nColumns;
@@ -223,7 +236,10 @@ function rotateLines(targetPoints) {
                     }
                 
                     // Force Deviation reflected by Rotation "error"
-                    //rotationAngle = rotationAngle + 30 * Math.PI / 180;
+                    if (passiveRotation == true){
+                        let error = smallestDistance[0]/paddingSize * 9;
+                        rotationAngle = rotationAngle + error * Math.PI / 180;
+                    }
                 
                     // Transforms to fix line position because the rotation is done around line's starting point, and not its center point
                     let myTransformX = x - x * Math.cos(rotationAngle) + y * Math.sin(rotationAngle);
@@ -235,8 +251,12 @@ function rotateLines(targetPoints) {
                     lines[i].relativeTransform = utils.multiply(utils.rotate(rotationAngle), lines[i].relativeTransform);
                     // Move the line back to where it was initially relative to it's parent element taking the 
                     // rotation displacement in consideration
-                    lines[i].x = locationRelativeToParentX + myTransformX;
+                    /*lines[i].x = locationRelativeToParentX + myTransformX;
                     lines[i].y = locationRelativeToParentY + myTransformY;         
+                    */
+                   lines[i].x = locationRelativeToParentX;
+                   lines[i].y = locationRelativeToParentY;
+
                 }
             }
         }

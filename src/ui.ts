@@ -9,6 +9,7 @@ const strokeWeightInput = document.getElementById('stroke-weight') as HTMLInputE
 const colorPickerInput = document.getElementById('colorPicker') as HTMLInputElement;
 const colorHexInput = document.getElementById('colorHexa') as HTMLInputElement;
 const colorAlphaInput = document.getElementById('ColorAlpha') as HTMLInputElement;
+const passiveRotationInput = document.getElementById('PassiveRotation') as HTMLInputElement;
 const widthReductionInput = document.getElementById('WidthReduction') as HTMLInputElement;
 const generateButton = document.getElementById('generate') as HTMLButtonElement;
 const randomizeButton = document.getElementById('randomizer') as HTMLButtonElement;
@@ -188,8 +189,9 @@ generateButton.addEventListener("click", () => {
         colorHex = "#" + colorHex
     }
     let paint = paintCreator(colorHex, colorAlpha);
+    let passiveRotation = passiveRotationInput.checked;
     let widthReduction = widthReductionInput.checked;
-    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, widthReduction, hasChanged} }, '*')
+    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, passiveRotation, widthReduction, hasChanged} }, '*')
     hasChanged = false;
 })
 
