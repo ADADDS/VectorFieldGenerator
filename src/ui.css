@@ -26,7 +26,7 @@ body{
 p {
     padding-left: 8px;
     font-size: 11x;
-    color: #333;
+    color: #    ;
 }
 
 #VisualSettings #inputRow{
@@ -70,7 +70,8 @@ input{
     height: 32px;
     border: 1px solid #fff;
     border-radius: 6px;
-    width: 50px;
+    color: #595959;
+    width: 40px;
     padding-right: 6px;
     text-align: right;
 }
@@ -81,7 +82,7 @@ input:focus {
 
 input:invalid{
     outline: none;
-    color: red;
+    color: #C50000;
 }
 
  #colorHexa{
@@ -296,10 +297,10 @@ select {
 
  .select-box {
    position: relative;
-   width: 120px;
+   width: 110px;
    margin: 0;
    font-size: 12px;
-   color: #333333;
+   color: #595959;
  }
 
  .select-box__current {
@@ -325,9 +326,9 @@ select {
    right: -4px;
    -webkit-transform: translateY(-50%);
            transform: translateY(-50%);
-   width: 20px;
-   -webkit-transition: 0.2s ease;
-   transition: 0.2s ease;
+   width: 18px;
+   -webkit-transition: 0.25s ease;
+   transition: 0.25s ease;
  }
  .select-box__value {
    display: -webkit-box;
@@ -343,11 +344,11 @@ select {
    display: none;
    width: 100%;
    margin: 0;
-   background-color: #fff;
  }
  .select-box__list {
    position: absolute;
    width: 100%;
+   border-radius: 12px;
    padding: 0;
    list-style: none;
    opacity: 0;
@@ -367,7 +368,9 @@ select {
    padding: 12px;
    color: #fff;
    background-color: #333;
- }
+   -webkit-box-shadow: 0px 0px 56px -15px rgba(0,0,0,0.7);
+   -moz-box-shadow: 0px 0px 56px -15px rgba(0,0,0,0.7);
+   box-shadow: 0px 0px 56px -15px rgba(0,0,0,0.7); }
  .select-box__option:hover, .select-box__option:focus {
    color: #fff;
    background-color: #3D3D3D;
