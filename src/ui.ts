@@ -15,6 +15,7 @@ const generateButton = document.getElementById('generate') as HTMLButtonElement;
 //const randomizeButton = document.getElementById('randomizer') as HTMLButtonElement;
 //const resetButton = document.getElementById("ResetDefault") as HTMLButtonElement;
 //const formElement = document.getElementById("Main") as HTMLFormElement;
+const arrowStyleInput = document.getElementById("custom-select") as HTMLInputElement;
 
 let invalid_answers = Array(6).fill(0);
 let hasChanged = true;
@@ -97,6 +98,10 @@ for (let i=0; i < sliders.length; i++) {
         hasChanged = true;
     })
 }
+
+arrowStyleInput.addEventListener("change", () => {
+    hasChanged = true;
+})
 
 // Check if any of the inputs are invalid, disabling the generate button when at least one entry is invalid
 function enableDisableButton() {
@@ -191,7 +196,18 @@ generateButton.addEventListener("click", () => {
     let paint = paintCreator(colorHex, colorAlpha);
     let passiveRotation = passiveRotationInput.checked;
     let widthReduction = widthReductionInput.checked;
-    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, passiveRotation, widthReduction, hasChanged} }, '*')
+    let arrowStyle: string;
+    switch(arrowStyleInput.value) {
+        case "None":
+            arrowStyle = "NONE";
+            break;
+        case "Line Arrow":
+            arrowStyle = "ARROW_LINES";
+            break;
+        case "Triangle Arrow":
+            arrowStyle = "ARROW_EQUILATERAL";
+    }
+    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, passiveRotation, widthReduction, hasChanged, arrowStyle} }, '*')
     hasChanged = false;
 })
 

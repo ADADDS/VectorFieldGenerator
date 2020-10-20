@@ -7,6 +7,7 @@ let baseWidth: number;
 let distanceResize = false;
 let passiveRotation = false;
 let strokeWeight: number;
+let capStyle: string;
 let startingPoint = { 
   x: 0, y: 0 
 };
@@ -25,6 +26,7 @@ export function handleGenerate(msg) {
         distanceResize = msg.widthReduction;
         passiveRotation = msg.passiveRotation;
         paint = msg.paint;
+        capStyle = msg.arrowStyle;
         generateGrid();
     } 
 
@@ -88,7 +90,7 @@ function generateGrid() {
             /* make a copy of the original node */
             let vecNetwork = JSON.parse(JSON.stringify(newLine.vectorNetwork));
             // Add 
-            vecNetwork.vertices[1].strokeCap = "ARROW_LINES";
+            vecNetwork.vertices[1].strokeCap = capStyle;
             newLine.vectorNetwork = vecNetwork;
             // Add line to document and to array
             figma.currentPage.appendChild(newLine);
@@ -143,7 +145,7 @@ function rotateLines(targetPoints) {
                     let acSum = 0;
                     let smallestDistance = selectClosestPoint(i, targetPoints);
                     let vecNetwork = JSON.parse(JSON.stringify(lines[i].vectorNetwork));
-                    vecNetwork.vertices[1].strokeCap = "ARROW_LINES";
+                    vecNetwork.vertices[1].strokeCap = capStyle;
                     lines[i].vectorNetwork = vecNetwork;
 
                     if (distanceResize == true) {
