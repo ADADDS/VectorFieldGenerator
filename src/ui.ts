@@ -4,7 +4,7 @@ const rowInput = document.getElementById('rows') as HTMLInputElement;
 const columnInput = document.getElementById('columns') as HTMLInputElement;
 const paddingInput = document.getElementById('padding') as HTMLInputElement;
 const cellSizeInput = document.getElementById('cell-size') as HTMLInputElement;
-const widthSizeInput = document.getElementById('width-size') as HTMLInputElement;
+//const widthSizeInput = document.getElementById('width-size') as HTMLInputElement;
 const strokeWeightInput = document.getElementById('stroke-weight') as HTMLInputElement;
 const colorPickerInput = document.getElementById('colorPicker') as HTMLInputElement;
 const colorHexInput = document.getElementById('colorHexa') as HTMLInputElement;
@@ -12,9 +12,9 @@ const colorAlphaInput = document.getElementById('ColorAlpha') as HTMLInputElemen
 const passiveRotationInput = document.getElementById('PassiveRotation') as HTMLInputElement;
 const widthReductionInput = document.getElementById('WidthReduction') as HTMLInputElement;
 const generateButton = document.getElementById('generate') as HTMLButtonElement;
-const randomizeButton = document.getElementById('randomizer') as HTMLButtonElement;
-const resetButton = document.getElementById("ResetDefault") as HTMLButtonElement;
-const formElement = document.getElementById("Main") as HTMLFormElement;
+//const randomizeButton = document.getElementById('randomizer') as HTMLButtonElement;
+//const resetButton = document.getElementById("ResetDefault") as HTMLButtonElement;
+//const formElement = document.getElementById("Main") as HTMLFormElement;
 
 let invalid_answers = Array(6).fill(0);
 let hasChanged = true;
@@ -195,18 +195,20 @@ generateButton.addEventListener("click", () => {
     hasChanged = false;
 })
 
-// Reset the input fields to its default values and re-validate to remove warnings
+// BUTTON REMOVED FOR NOW
+/*// Reset the input fields to its default values and re-validate to remove warnings
 resetButton.addEventListener("click", () => {
     formElement.reset();
     dispatchChangeEvents();
-})
+})*/
 
 // Synchronize ColorPicker and ColorHexa fields
 colorPickerInput.addEventListener("change", () => {
     colorHexInput.value = colorPickerInput.value;
 })
 
-// Fill the input fields with random values and re-validate to remove warnings
+// BUTTON REMOVED FOR NOW
+/*// Fill the input fields with random values and re-validate to remove warnings
 randomizeButton.addEventListener("click", () => {
     // Value is 3 to 10
     let randomValue = (Math.floor(Math.random()*8)+3).toString(10);
@@ -228,7 +230,7 @@ randomizeButton.addEventListener("click", () => {
     // Reset interface to all-valid state
     hasChanged = true;
     dispatchChangeEvents();
-})
+})*/
 
 // Close plugin when escape key is pressed
 document.addEventListener('keydown', (e) => {
