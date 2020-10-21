@@ -56,40 +56,23 @@ function generateGrid() {
     // Create the line in the center of its padding, append it to the document and push it to the array
     for (let i = 0; i < nRows; i++) {
         for (let j = 0; j < nColumns; j++){
-            /*
-            const newLine = figma.createLine();
-            let centerPaddingOffset = (paddingSize - baseWidth)/2;
-            newLine.resize(baseWidth, 0);
-            newLine.x = j*paddingSize + centerPaddingOffset + startingPoint.x;
-            newLine.y = i*paddingSize + paddingSize/2 + startingPoint.y;
-            newLine.strokes = paint;
-            newLine.strokeWeight = strokeWeight;
-            newLine.strokeAlign = "OUTSIDE";
-            newLine.strokeCap = "ARROW_EQUILATERAL";
-            // Add line to document and to array
-            figma.currentPage.appendChild(newLine);
-            lines.push(newLine);
-            */
-            
             const newLine = figma.createVector();
-            let centerPaddingOffset = (paddingSize - baseWidth)/2;
             newLine.vectorPaths = [{
                 windingRule: "EVENODD",
                 data: "M 0 0 L 100 0 Z"
             }];
             newLine.resize(baseWidth, 0);
-            /*
+            
+            let centerPaddingOffset = (paddingSize - baseWidth)/2;
             newLine.x = j*paddingSize + centerPaddingOffset + startingPoint.x;
-            newLine.y = i*paddingSize + paddingSize/2 + startingPoint.y;
-            */
-            newLine.x = j*paddingSize + startingPoint.x;
-            newLine.y = i*paddingSize + startingPoint.y;
+            newLine.y = i*paddingSize + paddingSize/2 + startingPoint.y; 
+            //newLine.x = j*paddingSize + startingPoint.x;
+            //newLine.y = i*paddingSize + startingPoint.y;
 
             newLine.strokes = paint;
             newLine.strokeWeight = strokeWeight;
-            /* make a copy of the original node */
+            // Change the strokeCap attribute of the vertex at the end of the vector 
             let vecNetwork = JSON.parse(JSON.stringify(newLine.vectorNetwork));
-            // Add 
             vecNetwork.vertices[1].strokeCap = capStyle;
             newLine.vectorNetwork = vecNetwork;
             // Add line to document and to array
@@ -117,24 +100,29 @@ function rotateLines(targetPoints) {
             elementsRemoved = true;
         }
         else {
+            // If there are removed elements, only pre-process the field
             if (elementsRemoved == true) {
                 continue;
             }
+            // Rotate elements normally
             else {
                 // Reset line rotation, width and position
                 lines[i].rotation = 0;
                 lines[i].resize(baseWidth, 0);
+                
                 let centerPaddingOffset = (paddingSize - baseWidth)/2;
                 lines[i].x = (i%nColumns)*paddingSize + centerPaddingOffset + startingPoint.x;
                 lines[i].y = (Math.floor(i/nColumns))*paddingSize + paddingSize/2 + startingPoint.y;
-        
+                //lines[i].x = (i%nColumns)*paddingSize + startingPoint.x;
+                //lines[i].y = (Math.floor(i/nColumns))*paddingSize + startingPoint.y;
+
                 // Select target point/points
                 let inflectionPoints = preprocessInflectionPoints(i, targetPoints);
         
                 // Deal with line that is a target point
                 if (inflectionPoints[0] == -1) {
                     lines[i].resize(0.01, 0);
-                    lines[i].x = lines[i].x + baseWidth/2;
+                    //lines[i].x = lines[i].x + baseWidth/2;
                     let vecNetwork = JSON.parse(JSON.stringify(lines[i].vectorNetwork));
                     vecNetwork.vertices[1].strokeCap = "NONE";
                     lines[i].vectorNetwork = vecNetwork;
@@ -148,6 +136,7 @@ function rotateLines(targetPoints) {
                     vecNetwork.vertices[1].strokeCap = capStyle;
                     lines[i].vectorNetwork = vecNetwork;
 
+                    // If Size-Reduction is selected
                     if (distanceResize == true) {
                         // Resize based on the distance
                         let reducingFactor = smallestDistance[0] / paddingSize;
@@ -186,15 +175,13 @@ function rotateLines(targetPoints) {
                         let newWidth = widthResize*lines[i].width;
                         lines[i].resize(newWidth, 0);
                         // Fix position based on the resize
-                        lines[i].x = lines[i].x + (baseWidth - newWidth)/2;
+                        //lines[i].x = lines[i].x + (baseWidth - newWidth)/2;
                     }
+
+                    let rotationAngle;
                     // Figure out where the current line is relative to its parent
                     let locationRelativeToParentX = lines[i].x;
                     let locationRelativeToParentY = lines[i].y;
-                    // Get the center of the rotation-point based on the line size
-                    let x = lines[i].width/2;
-                    let y = strokeWeight/2;
-                    let rotationAngle;
 
                     // If there's only one point affecting the Rotation
                     if (inflectionPoints[0] == 1) {
@@ -237,12 +224,17 @@ function rotateLines(targetPoints) {
                         }
                     }
                 
-                    // Force Deviation reflected by Rotation "error"
+                    // Force Deviation reflected by distance to the inflection point
                     if (passiveRotation == true){
-                        let error = smallestDistance[0]/paddingSize * 9;
-                        rotationAngle = rotationAngle + error * Math.PI / 180;
+                        let deviation = smallestDistance[0]/paddingSize * 9;
+                        rotationAngle = rotationAngle + deviation * Math.PI / 180;
                     }
                 
+
+                    /*
+                    // Get the center of the rotation-point based on the line size
+                    let x = lines[i].width/2;
+                    let y = strokeWeight/2;
                     // Transforms to fix line position because the rotation is done around line's starting point, and not its center point
                     let myTransformX = x - x * Math.cos(rotationAngle) + y * Math.sin(rotationAngle);
                     let myTransformY = y + x * Math.sin(rotationAngle) - y * Math.cos(rotationAngle);
@@ -251,14 +243,19 @@ function rotateLines(targetPoints) {
                     lines[i].y = 0;
                     // Rotate the line
                     lines[i].relativeTransform = utils.multiply(utils.rotate(rotationAngle), lines[i].relativeTransform);
+                    */
+
                     // Move the line back to where it was initially relative to it's parent element taking the 
                     // rotation displacement in consideration
                     /*lines[i].x = locationRelativeToParentX + myTransformX;
                     lines[i].y = locationRelativeToParentY + myTransformY;         
                     */
-                   lines[i].x = locationRelativeToParentX;
-                   lines[i].y = locationRelativeToParentY;
-
+                    /*
+                    lines[i].x = locationRelativeToParentX;
+                    lines[i].y = locationRelativeToParentY;
+                    */
+                    let rotationDegree = rotationAngle * 180/Math.PI;
+                    lines[i].rotation = rotationDegree;
                 }
             }
         }
@@ -274,7 +271,8 @@ function getRandomPoint() {
     let randomIndex = Math.floor(Math.random() * lines.length);
     let lineRefX = Math.floor(randomIndex/nColumns);
     let lineRefY = (randomIndex%nColumns);
-    let pointPosX = lineRefY * paddingSize + paddingSize/2 + startingPoint.x;
+    let centerPaddingOffset = (paddingSize - baseWidth)/2;
+    let pointPosX = lineRefY * paddingSize + centerPaddingOffset + startingPoint.x;
     let pointPosY = lineRefX * paddingSize + paddingSize/2 + startingPoint.y;
     return [lineRefX, lineRefY, pointPosX, pointPosY];
 }
