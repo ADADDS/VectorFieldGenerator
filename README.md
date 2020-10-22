@@ -1,4 +1,4 @@
-![Readme Cover](https://user-images.githubusercontent.com/20411105/96369075-37f67a80-112e-11eb-9a9d-607ae58772f4.png)
+![Readme Cover](https://user-images.githubusercontent.com/20411105/96924919-c00bb580-1489-11eb-8f53-f756c648e56b.png)
 # Vector Field Generator
 Is a customizable vector field generator created with [Figma Plugin API](https://www.figma.com/plugin-docs/intro/) using [TypeScript](https://www.typescriptlang.org/). This plugins creates vector fields by allowing users to customize a small set of parameters that are used to generate a group of lines to visually simulate a [vector field](https://en.wikipedia.org/wiki/Vector_field).
 
@@ -10,16 +10,8 @@ Is a customizable vector field generator created with [Figma Plugin API](https:/
 ## How it works
 This plugin provides two core functionalities:
 
-1. **Generate vector fields:** through trigonometry a n columns x n rows matrix is generated using small lines that simulate the behavior of mathematical vector fields.
-2. **Smart populate:** you can randomize values for the number of rows, columns, padding, cell-size and color.
-
-
-![Application Interface](https://user-images.githubusercontent.com/20411105/96369162-c9fe8300-112e-11eb-89b0-306267163e52.png)
-
- 
-* **Generate** creates the field using the values specified by the user.
-* **Randomizer** will randomly create new values for the number of rows and columns, padding, cell-size and color. After that just click ```Generate```.
-* **Reset default** makes all the values go back to their initial state.
+1. **Generate vector fields:** through trigonometry a matrix is generated using small lines that simulate the behavior of mathematical vector fields.
+2. **Randomizer:** you can randomize values for the number of rows, columns, padding, cell-size, allowing you to easily explore.
 
 **Note:** the randomizer function will only create square matrices - which means the number of columns equals the number of rows.
 
