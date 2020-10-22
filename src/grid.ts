@@ -230,30 +230,7 @@ function rotateLines(targetPoints) {
                         rotationAngle = rotationAngle + deviation * Math.PI / 180;
                     }
                 
-
-                    /*
-                    // Get the center of the rotation-point based on the line size
-                    let x = lines[i].width/2;
-                    let y = strokeWeight/2;
-                    // Transforms to fix line position because the rotation is done around line's starting point, and not its center point
-                    let myTransformX = x - x * Math.cos(rotationAngle) + y * Math.sin(rotationAngle);
-                    let myTransformY = y + x * Math.sin(rotationAngle) - y * Math.cos(rotationAngle);
-                    // Move to origin
-                    lines[i].x = 0;
-                    lines[i].y = 0;
-                    // Rotate the line
-                    lines[i].relativeTransform = utils.multiply(utils.rotate(rotationAngle), lines[i].relativeTransform);
-                    */
-
-                    // Move the line back to where it was initially relative to it's parent element taking the 
-                    // rotation displacement in consideration
-                    /*lines[i].x = locationRelativeToParentX + myTransformX;
-                    lines[i].y = locationRelativeToParentY + myTransformY;         
-                    */
-                    /*
-                    lines[i].x = locationRelativeToParentX;
-                    lines[i].y = locationRelativeToParentY;
-                    */
+                    // Rotate the lines using the rotation attribute from Figma elements
                     let rotationDegree = rotationAngle * 180/Math.PI;
                     lines[i].rotation = rotationDegree;
                 }
@@ -307,7 +284,7 @@ function selectClosestPoint(lineIndex, points) {
 // Preprocess the inflection points, returning the number of points, sum of distances and all the points
 function preprocessInflectionPoints(lineIndex, points) {
     let output = [];
-    // 0 inflection points
+    // Zero inflection points
     if (points.length < 1) {
         output.push(0);
         output.push(null);

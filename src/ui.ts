@@ -182,34 +182,7 @@ function hexadecimalValidate(value: any): [boolean, string] {
 }
 
 // Send the input values to plugin code via message
-generateButton.addEventListener("click", () => {
-    let rows = parseInt(rowInput.value, 10);
-    let columns = parseInt(columnInput.value, 10);
-    let padding = parseInt(paddingInput.value, 10);
-    let cellSize = parseInt(cellSizeInput.value, 10);
-    let strokeWeight = parseInt(strokeWeightInput.value, 10);
-    let colorAlpha = parseInt(colorAlphaInput.value, 10);
-    let colorHex = colorHexInput.value;
-    if (colorHex.length == 6) {
-        colorHex = "#" + colorHex
-    }
-    let paint = paintCreator(colorHex, colorAlpha);
-    let passiveRotation = passiveRotationInput.checked;
-    let widthReduction = widthReductionInput.checked;
-    let arrowStyle: string;
-    switch(arrowStyleInput.value) {
-        case "None":
-            arrowStyle = "NONE";
-            break;
-        case "Line Arrow":
-            arrowStyle = "ARROW_LINES";
-            break;
-        case "Triangle Arrow":
-            arrowStyle = "ARROW_EQUILATERAL";
-    }
-    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, passiveRotation, widthReduction, hasChanged, arrowStyle} }, '*')
-    hasChanged = false;
-})
+generateButton.addEventListener("click", sendGenerateMessage);
 
 // BUTTON REMOVED FOR NOW
 /*// Reset the input fields to its default values and re-validate to remove warnings
@@ -246,6 +219,7 @@ randomizeButton.addEventListener("click", () => {
     // Reset interface to all-valid state
     hasChanged = true;
     dispatchChangeEvents();
+    sendGenerateMessage();
 })*/
 
 // Close plugin when escape key is pressed
@@ -294,3 +268,32 @@ function completeHexa(initialInput: string){
 
     return finalInput;  
 }  
+
+function sendGenerateMessage() {
+    let rows = parseInt(rowInput.value, 10);
+    let columns = parseInt(columnInput.value, 10);
+    let padding = parseInt(paddingInput.value, 10);
+    let cellSize = parseInt(cellSizeInput.value, 10);
+    let strokeWeight = parseInt(strokeWeightInput.value, 10);
+    let colorAlpha = parseInt(colorAlphaInput.value, 10);
+    let colorHex = colorHexInput.value;
+    if (colorHex.length == 6) {
+        colorHex = "#" + colorHex
+    }
+    let paint = paintCreator(colorHex, colorAlpha);
+    let passiveRotation = passiveRotationInput.checked;
+    let widthReduction = widthReductionInput.checked;
+    let arrowStyle: string;
+    switch(arrowStyleInput.value) {
+        case "None":
+            arrowStyle = "NONE";
+            break;
+        case "Line Arrow":
+            arrowStyle = "ARROW_LINES";
+            break;
+        case "Triangle Arrow":
+            arrowStyle = "ARROW_EQUILATERAL";
+    }
+    parent.postMessage({ pluginMessage: { type: 'generate-grid', rows, columns, padding, cellSize, strokeWeight, paint, passiveRotation, widthReduction, hasChanged, arrowStyle} }, '*')
+    hasChanged = false;
+}
