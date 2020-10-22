@@ -313,7 +313,7 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     background-position: right;
-    background-image: url(/Users/luciano.infanti/Desktop/PluginTest/PluginTest/src/images/chevron-down.svg); 
+    background-image: url('./images/chevron-down.svg'); 
     background-repeat: no-repeat;
     color: #333;
     padding-right: 24px;

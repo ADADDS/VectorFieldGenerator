@@ -12,7 +12,7 @@ const colorAlphaInput = document.getElementById('ColorAlpha') as HTMLInputElemen
 const passiveRotationInput = document.getElementById('PassiveRotation') as HTMLInputElement;
 const widthReductionInput = document.getElementById('WidthReduction') as HTMLInputElement;
 const generateButton = document.getElementById('generate') as HTMLButtonElement;
-//const randomizeButton = document.getElementById('randomizer') as HTMLButtonElement;
+const randomizeButton = document.getElementById('randomizer') as HTMLButtonElement;
 //const resetButton = document.getElementById("ResetDefault") as HTMLButtonElement;
 //const formElement = document.getElementById("Main") as HTMLFormElement;
 const arrowStyleInput = document.getElementById("custom-select") as HTMLInputElement;
@@ -196,8 +196,7 @@ colorPickerInput.addEventListener("change", () => {
     colorHexInput.value = colorPickerInput.value;
 })
 
-// BUTTON REMOVED FOR NOW
-/*// Fill the input fields with random values and re-validate to remove warnings
+// Fill the input fields with random values and re-validate to remove warnings
 randomizeButton.addEventListener("click", () => {
     // Value is 3 to 10
     let randomValue = (Math.floor(Math.random()*8)+3).toString(10);
@@ -220,7 +219,7 @@ randomizeButton.addEventListener("click", () => {
     hasChanged = true;
     dispatchChangeEvents();
     sendGenerateMessage();
-})*/
+})
 
 // Close plugin when escape key is pressed
 document.addEventListener('keydown', (e) => {
