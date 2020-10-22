@@ -30,20 +30,20 @@ export function handleGenerate(msg) {
         generateGrid();
     } 
 
-    if (squareMatrix()) {
-        rotateLines([getRandomPoint()]);
+    if (squareExampleMatrix()) {
+        rotateLines(getRandomPoints(1));
     }
     else {
         let randomTests = Math.floor(Math.random()*7);
         //let randomTests = 1;
         if (randomTests <= 3) {
-            rotateLines([getRandomPoint()]);
+            rotateLines(getRandomPoints(1));
         }
         else if (randomTests <= 5) {
-            rotateLines([getRandomPoint(), getRandomPoint()]);
+            rotateLines(getRandomPoints(2));
         }
         else {
-            rotateLines([getRandomPoint(), getRandomPoint(), getRandomPoint()]);      
+            rotateLines(getRandomPoints(3));      
         }
     }
 }
@@ -244,14 +244,25 @@ function rotateLines(targetPoints) {
 }
 
 // Return a random inflection point
-function getRandomPoint() {
-    let randomIndex = Math.floor(Math.random() * lines.length);
-    let lineRefX = Math.floor(randomIndex/nColumns);
-    let lineRefY = (randomIndex%nColumns);
-    let centerPaddingOffset = (paddingSize - baseWidth)/2;
-    let pointPosX = lineRefY * paddingSize + centerPaddingOffset + startingPoint.x;
-    let pointPosY = lineRefX * paddingSize + paddingSize/2 + startingPoint.y;
-    return [lineRefX, lineRefY, pointPosX, pointPosY];
+function getRandomPoints(n) {
+    let points: any = [];
+    let numbers = [];
+    while (numbers.length < n) {
+        let randomIndex = Math.floor(Math.random() * lines.length);
+        if (numbers.indexOf(randomIndex) == -1) {
+            numbers.push(randomIndex);
+        }
+    }
+    for (let i = 0; i < n; i++) {
+        let pointIndex = numbers[i];
+        let lineRefX = Math.floor(pointIndex/nColumns);
+        let lineRefY = (pointIndex%nColumns);
+        let centerPaddingOffset = (paddingSize - baseWidth)/2;
+        let pointPosX = lineRefY * paddingSize + centerPaddingOffset + startingPoint.x;
+        let pointPosY = lineRefX * paddingSize + paddingSize/2 + startingPoint.y;
+        points.push([lineRefX, lineRefY, pointPosX, pointPosY]);
+    }
+    return points;
 }
   
 // Return closest point from a list of points
@@ -356,7 +367,7 @@ function clearLines(reset) {
 }
 
 // True if grid is a square grid
-function squareMatrix() {
+function squareExampleMatrix() {
     if (nRows == 3 && nColumns == 3) {
         return true;
     }

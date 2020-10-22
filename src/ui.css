@@ -318,6 +318,7 @@ select {
     font-size: 12px;
     align-items: center;
 }
+
 select:hover {
     -webkit-appearance: none;
     -moz-appearance: none;
