@@ -177,7 +177,7 @@ function hexadecimalValidate(value: any): [boolean, string] {
     // Invalid hexadecimal number
     else {
         colorPickerInput.value = "#FFFFFF";
-        return [false, "Color must be a valid hexadecimal number"];
+        return [false, "Color must be a valid hexadecimal number."];
     }
 }
 

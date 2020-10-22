@@ -4,17 +4,15 @@ body{
     margin: 0;   
 }
 
-
 #matrixStructure{
     width: 200px;
     padding-left: 32px;
-    padding-bottom: 14px;
 }
 
 #VisualSettings{
     padding-top: 24px;
     padding-left: 32px;
-    padding-bottom: 14px;
+    padding-bottom: 0px;
     border-top: 1px;
     border-right: 0px;
     border-left: 0px;
@@ -37,7 +35,7 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
 }
 
 #lineDetail{
@@ -60,7 +58,6 @@ h4 {
 }
 
 /* Inputs */ 
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -72,7 +69,8 @@ input{
     border-radius: 6px;
     color: #595959;
     width: 40px;
-    padding-right: 6px;
+    padding-right: 0px;
+    font-size: 12px;
     text-align: right;
 }
 
@@ -100,14 +98,9 @@ input:invalid{
     background: none;
 }
 
-#colorPicker::-webkit-color-swatch-wrapper {
-    padding: 0px;
-    margin: 0px;
-    
-}
-
 #colorPicker::-webkit-color-swatch {
     border: 1px;
+    margin-top: -3px;
     border-style: solid;
     border-color:#ccc;
     height: 14px;
@@ -150,6 +143,10 @@ input:invalid{
     transition: .3s;
 }
 
+.slider:hover {
+    background-color: #BDBDBD;
+}
+
 .slider:before {
     position: absolute;
     content: "";
@@ -185,7 +182,6 @@ input:checked + .slider:before {
 }
 
 /* Error status on inputs */
-
 #errorWrapper{
     display: flex;
     justify-content: end;
@@ -232,7 +228,6 @@ input:checked + .slider:before {
 }
   
 /* Footer section */ 
-
 #Footer{
     border-top: 1px;
     border-right: 0px;
@@ -243,16 +238,15 @@ input:checked + .slider:before {
 
     padding-left: 32px;
     padding-right: 32px;
-    padding-top: 20px;
+    padding-top: 14px;
 }
 
 /* Buttons */
-
 .btn-primary {
     cursor: pointer;
     font-size: 12px;
-    width: 100%;
-    border-radius: 8px;
+    width: 200px;
+    border-radius: 4px;
     background: #333;
     color:#fff ;
     border: none;
@@ -280,11 +274,11 @@ input:checked + .slider:before {
     cursor: pointer;
     margin-bottom: 8px;
     font-size: 12px;
-    width: 100%;
-    border-radius: 8px;
+    width: 200px;
+    border-radius: 4px;
     color: #333333;
     font-size: 12px;
-    border-color:#191F23;
+    border-color:#ccc;
     border-width: 1px;
     padding: 12px 16px 12px 16px;
     outline: none;
@@ -308,19 +302,32 @@ input:checked + .slider:before {
 }
 
 /* select */
-
 select {
+    color: #595959;
     -webkit-appearance: none;
     -moz-appearance: none;
     background-position: right;
     background-image: url('./images/chevron-down.svg'); 
     background-repeat: no-repeat;
-    color: #333;
-    padding-right: 24px;
+    background-position-y: 7px;
+    height: 32px;
+    padding-right: 20px;
     background-color: #fff;
     border: none;   
- }
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    align-items: center;
+}
+select:hover {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-position: right;
+    background-image: url('./images/chevron-downhover.svg'); 
+    background-position-y: 7px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
 
- select:focus {
+select:focus {
     outline: none;
- }
+}
