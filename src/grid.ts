@@ -122,7 +122,7 @@ function rotateLines(targetPoints) {
                 // Deal with line that is a target point
                 if (inflectionPoints[0] == -1) {
                     lines[i].resize(0.01, 0);
-                    //lines[i].x = lines[i].x + baseWidth/2;
+                    lines[i].strokeWeight = 1;
                     let vecNetwork = JSON.parse(JSON.stringify(lines[i].vectorNetwork));
                     vecNetwork.vertices[1].strokeCap = "NONE";
                     lines[i].vectorNetwork = vecNetwork;
@@ -135,6 +135,7 @@ function rotateLines(targetPoints) {
                     let vecNetwork = JSON.parse(JSON.stringify(lines[i].vectorNetwork));
                     vecNetwork.vertices[1].strokeCap = capStyle;
                     lines[i].vectorNetwork = vecNetwork;
+                    lines[i].strokeWeight = strokeWeight;
 
                     // If Size-Reduction is selected
                     if (distanceResize == true) {
