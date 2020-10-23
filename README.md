@@ -3,7 +3,7 @@
 Is a customizable vector field generator created with [Figma Plugin API](https://www.figma.com/plugin-docs/intro/) using [TypeScript](https://www.typescriptlang.org/). This plugins creates vector fields by allowing users to customize a small set of parameters that are used to generate a group of lines to visually simulate a [vector field](https://en.wikipedia.org/wiki/Vector_field).
 
 ## Instalation 
-1. [Install on Figma](#)
+1. [Install on Figma](https://www.figma.com/community/plugin/901275602012692311)
 2. Open a new or existing document, then either hit ```cmd+/``` or ```ctrl+;```, search "Vector Field Generator" and hit enter. Or search for the the plugin on Community tab.
 3. Start messing around and once you are done, click  ```Generate``` to create your very first vector field.
 
