@@ -198,25 +198,20 @@ colorPickerInput.addEventListener("change", () => {
 
 // Fill the input fields with random values and re-validate to remove warnings
 randomizeButton.addEventListener("click", () => {
-    // Value is 3 to 10
-    let randomValue = (Math.floor(Math.random()*8)+3).toString(10);
+    // Value is 10 to 30
+    let randomValue = (Math.floor(Math.random()*21)+10).toString(10);
     rowInput.value = randomValue;
     columnInput.value = randomValue;
-    // Value is 60
-    cellSizeInput.value = Number(60).toString();
-    // Value is 20, 30, 40, 50 or 60
-    randomValue = ((Math.floor(Math.random()*5)*10)+20).toString(10);
+    // Value is from 50 to 200, in increments of 10
+    let size = ((Math.floor(Math.random()*16)*10)+50);
+    randomValue = size.toString(10);
     paddingInput.value = randomValue;
-    // Value is #000000 to #FFFFFF
-    randomValue = (Math.floor(Math.random()*16777215)).toString(16);
-    randomValue = "#" + completeHexa(randomValue);
-    colorHexInput.value = randomValue;
-    colorPickerInput.value = randomValue;
-    // Value is 1 to 3
-    randomValue = (Math.floor(Math.random()*4)+1).toString(10);
+    cellSizeInput.value = randomValue;
+    hasChanged = true;
+    randomValue = (Math.floor(size/20)).toString(10);
+    // Value is CellSize/20
     strokeWeightInput.value = randomValue;
     // Reset interface to all-valid state
-    hasChanged = true;
     dispatchChangeEvents();
     sendGenerateMessage();
 })
